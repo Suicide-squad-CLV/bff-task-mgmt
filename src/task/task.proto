@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package task;
+
+service TaskGRPCService {
+  rpc FindOne (TaskById) returns (Task);
+  rpc FindMany (TaskList) returns (repeated Task);
+}
+
+message TaskById {
+  int32 id;
+}
+
+message TaskList {
+  string title;
+  string assignUserId;
+}

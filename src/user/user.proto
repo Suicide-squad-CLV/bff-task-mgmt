@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package user;
+
+service UserGRPCService {
+  rpc FindOne (UserById) returns (User);
+  rpc FindMany (UserList) returns (repeated User);
+}
+
+message UserById {
+  string id;
+}
+
+message UserList {
+  string fullName;
+  string email;
+}
