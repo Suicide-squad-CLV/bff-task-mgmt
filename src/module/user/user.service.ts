@@ -1,8 +1,6 @@
 import { Inject, OnModuleInit, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-import { toArray } from 'rxjs/operators';
-import { UserArgs } from './dto/User-args.dto';
 import { NewUserInput } from './dto/new-User-input.dto';
 import {
   USER_GR_PC_SERVICE_NAME,
@@ -28,19 +26,19 @@ export class UserService implements OnModuleInit {
     return this.usergRPCService.findOne({ id: id });
   }
 
-  findAll(UserArgs: UserArgs): Observable<User[]> {
-    // TODO: Convert UserList interface from gRPC Service to GraphQL [User] entity
-    const stream = this.usergRPCService.findMany({
-      fullName: UserArgs.fullName,
-      email: UserArgs.email,
-    });
-    return stream.pipe(toArray());
-    // const userList = this.usergRPCService.findMany({
-    //   fullName: UserArgs.fullName,
-    //   email: UserArgs.email,
-    // });
-    // return userList;
-  }
+  // findAll(UserArgs: UserArgs): Observable<User[]> {
+  //   // TODO: Convert UserList interface from gRPC Service to GraphQL [User] entity
+  //   const stream = this.usergRPCService.findMany({
+  //     fullName: UserArgs.fullName,
+  //     email: UserArgs.email,
+  //   });
+  //   return stream.pipe(toArray());
+  //   // const userList = this.usergRPCService.findMany({
+  //   //   fullName: UserArgs.fullName,
+  //   //   email: UserArgs.email,
+  //   // });
+  //   // return userList;
+  // }
 
   create(newUserData: NewUserInput): Observable<User> {
     // TODO: Implement Create gRPC Service

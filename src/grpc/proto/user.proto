@@ -4,7 +4,18 @@ package user;
 
 service UserGRPCService {
   rpc FindOne (UserId) returns (User);
-  rpc FindMany (UserInfo) returns (stream User);
+  rpc FindMany (UserInfo) returns (Users);
+  rpc Create (RegisterDto) returns (User);
+}
+
+message Users {
+  repeated User users = 1;
+}
+
+message RegisterDto {
+  string fullname = 1;
+  string email = 2;
+  string password = 3;
 }
 
 message UserId {
@@ -12,19 +23,18 @@ message UserId {
 }
 
 message UserInfo {
-  string fullName = 1;
+  string fullname = 1;
   string email = 2;
 }
 
 message User {
   string id = 1;
-  string fullName = 2;
+  string fullname = 2;
   string email = 3;
   string password = 4;
   string avatar = 5;
-  string refreshToken = 6;
-  bool hasChangePassword = 7;
-  bool isDeleted = 8;
-  string createDate = 9;
-  string updateDate = 10;
+  string refresh_token = 6;
+  bool deleted_at = 7;
+  string created_at = 8;
+  string updated_at = 9;
 }
