@@ -1,4 +1,4 @@
-import { User } from 'src/user/entity/user.entity';
+import { User } from 'src/module/user/entity/user.entity';
 import { NotFoundException } from '@nestjs/common';
 import {
   Query,
@@ -10,7 +10,7 @@ import {
 } from '@nestjs/graphql';
 import { UserArgs } from './dto/user-args.dto';
 import { NewUserInput } from './dto/new-user-input.dto';
-import { TaskService } from 'src/task/task.service';
+import { TaskService } from 'src/module/task/task.service';
 import { UserService } from './user.service';
 import { firstValueFrom } from 'rxjs';
 

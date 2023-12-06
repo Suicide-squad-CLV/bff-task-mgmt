@@ -10,11 +10,40 @@ import { join } from 'path';
 import { upperDirectiveTransformer } from './graphql/directive/upper-case.directive';
 import { TaskModule } from './module/task/task.module';
 import { UserModule } from './module/user/user.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import {
+  USER_PACKAGE_NAME,
+  protobufPackage as USER_PROTOBUF_PACKAGE,
+} from './grpc/interface/user';
+import {
+  TASK_PACKAGE_NAME,
+  protobufPackage as TASK_PROTOBUF_PACKAGE,
+} from './grpc/interface/task';
 
 @Module({
   imports: [
     TaskModule,
     UserModule,
+    ClientsModule.register([
+      {
+        name: TASK_PACKAGE_NAME,
+        transport: Transport.GRPC,
+        options: {
+          url: '',
+          package: TASK_PROTOBUF_PACKAGE,
+          protoPath: [join(__dirname, './proto/task.proto')],
+        },
+      },
+      {
+        name: USER_PACKAGE_NAME,
+        transport: Transport.GRPC,
+        options: {
+          url: '',
+          package: USER_PROTOBUF_PACKAGE,
+          protoPath: [join(__dirname, './proto/user.proto')],
+        },
+      },
+    ]),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
