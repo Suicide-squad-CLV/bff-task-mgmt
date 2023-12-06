@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "generate:proto": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --proto_path=./src/grpc --ts_proto_out=./src/grpc ./src/grpc/*.proto --ts_proto_opt=fileSuffix= --ts_proto_opt=useDate=true,nestJs=true"
+    "generate:proto": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto.cmd --proto_path=./src/grpc/proto --ts_proto_out=./src/grpc/interface ./src/grpc/proto/*.proto --ts_proto_opt=fileSuffix= --ts_proto_opt=useDate=true,nestJs=true"
   },
   "dependencies": {
     "@apollo/server": "^4.9.5",
