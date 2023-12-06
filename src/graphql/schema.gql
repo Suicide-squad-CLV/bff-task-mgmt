@@ -26,7 +26,7 @@ input NewUserInput {
   avatar: String
   email: String!
   fullName: String!
-  id: String! = "eec9fe26-6e5f-4295-b622-38bd7981e92c"
+  id: String! = "fc53a37b-c851-47ec-8081-9ca126f6d9a8"
   password: String!
 }
 
