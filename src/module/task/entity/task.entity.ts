@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { User } from 'src/user/entity/user.entity';
+import { User } from 'src/module/user/entity/User.entity';
 
 @ObjectType()
 export class Task {

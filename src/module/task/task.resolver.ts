@@ -12,9 +12,9 @@ import {
 import { NewTaskInput } from './dto/new-task-input.dto';
 import { TaskArgs } from './dto/task-args.dto';
 import { TaskService } from './task.service';
-import { UserService } from 'src/user/user.service';
 import { firstValueFrom } from 'rxjs';
-import { User } from 'src/user/entity/user.entity';
+import { UserService } from '../user/user.service';
+import { User } from '../user/entity/User.entity';
 
 @Resolver(() => Task)
 export class TaskResolver {
