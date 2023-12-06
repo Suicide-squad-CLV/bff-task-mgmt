@@ -10,13 +10,11 @@ import { join } from 'path';
 import { upperDirectiveTransformer } from './graphql/directive/upper-case.directive';
 import { TaskModule } from './module/task/task.module';
 import { UserModule } from './module/user/user.module';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     TaskModule,
     UserModule,
-    ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),

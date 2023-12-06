@@ -1,31 +1,20 @@
-import getGrpcOptions from './../../grpc/grpc-client.options';
 import { Module } from '@nestjs/common';
 import { UserResolver } from './user.resolver';
 import { ClientsModule } from '@nestjs/microservices';
+import { grpcClientOptions } from '../grpc/grpc-client.options';
 import { UserService } from './user.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { USER_PACKAGE_NAME } from 'src/grpc/user';
-import { TaskService } from '../task/task.service';
-import { TASK_PACKAGE_NAME } from 'src/grpc/task';
+import { TaskService } from 'src/task/task.service';
 
 @Module({
   imports: [
-    ClientsModule.registerAsync([
+    ClientsModule.register([
       {
         name: 'USER_PACKAGE',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: async (configService: ConfigService) => {
-          return getGrpcOptions(configService, USER_PACKAGE_NAME, 'user');
-        },
+        ...grpcClientOptions,
       },
       {
         name: 'TASK_PACKAGE',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: async (configService: ConfigService) => {
-          return getGrpcOptions(configService, TASK_PACKAGE_NAME, 'task');
-        },
+        ...grpcClientOptions,
       },
     ]),
   ],
