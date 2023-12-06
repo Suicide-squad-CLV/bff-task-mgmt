@@ -1,37 +1,45 @@
 import { Inject, OnModuleInit, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-import { User } from './entity/User.entity';
-import { UserId } from './interface/user-id.interface';
-import { UserInfo } from './interface/user-info.interface';
+import { toArray } from 'rxjs/operators';
 import { UserArgs } from './dto/User-args.dto';
 import { NewUserInput } from './dto/new-User-input.dto';
-
-interface UserGRPCService {
-  findOne(data: UserId): Observable<User>;
-  findMany(data: UserInfo): Observable<User[]>;
-}
+import {
+  USER_GR_PC_SERVICE_NAME,
+  USER_PACKAGE_NAME,
+  UserGRPCServiceClient,
+  User,
+} from 'src/grpc/interface/user';
 
 @Injectable()
 export class UserService implements OnModuleInit {
-  private usergRPCService: UserGRPCService;
+  private usergRPCService: UserGRPCServiceClient;
 
-  constructor(@Inject('USER_PACKAGE') private readonly client: ClientGrpc) {}
+  constructor(@Inject(USER_PACKAGE_NAME) private readonly client: ClientGrpc) {}
 
   onModuleInit() {
-    this.usergRPCService =
-      this.client.getService<UserGRPCService>('UserGRPCService');
+    this.usergRPCService = this.client.getService<UserGRPCServiceClient>(
+      USER_GR_PC_SERVICE_NAME,
+    );
   }
 
   findOneById(id: string): Observable<User> {
+    // TODO: Convert User interface from gRPC Service to GraphQL User entity
     return this.usergRPCService.findOne({ id: id });
   }
 
   findAll(UserArgs: UserArgs): Observable<User[]> {
-    return this.usergRPCService.findMany({
+    // TODO: Convert UserList interface from gRPC Service to GraphQL [User] entity
+    const stream = this.usergRPCService.findMany({
       fullName: UserArgs.fullName,
       email: UserArgs.email,
     });
+    return stream.pipe(toArray());
+    // const userList = this.usergRPCService.findMany({
+    //   fullName: UserArgs.fullName,
+    //   email: UserArgs.email,
+    // });
+    // return userList;
   }
 
   create(newUserData: NewUserInput): Observable<User> {

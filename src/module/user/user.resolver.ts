@@ -1,5 +1,5 @@
 import { User } from 'src/module/user/entity/user.entity';
-import { NotFoundException } from '@nestjs/common';
+// import { NotFoundException } from '@nestjs/common';
 import {
   Query,
   Args,
@@ -12,7 +12,7 @@ import { UserArgs } from './dto/user-args.dto';
 import { NewUserInput } from './dto/new-user-input.dto';
 import { TaskService } from 'src/module/task/task.service';
 import { UserService } from './user.service';
-import { firstValueFrom } from 'rxjs';
+// import { firstValueFrom } from 'rxjs';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -23,22 +23,28 @@ export class UserResolver {
 
   @Query(() => User)
   async user(@Args('id') id: string): Promise<User> {
-    const user = await firstValueFrom(this.userService.findOneById(id));
-    if (!user) {
-      throw new NotFoundException(id);
-    }
-    return user;
+    // const user = await firstValueFrom(this.userService.findOneById(id));
+    // if (!user) {
+    //   throw new NotFoundException(id);
+    // }
+    // return user;
+    console.log(id);
+    return new User();
   }
 
   @Query(() => [User])
   async users(@Args() userArgs: UserArgs): Promise<User[]> {
-    return firstValueFrom(this.userService.findAll(userArgs));
+    // return firstValueFrom(this.userService.findAll(userArgs));
+    console.log(userArgs);
+    return [];
   }
 
   @Mutation(() => User)
   async addUser(@Args('newUserData') newUserData: NewUserInput): Promise<User> {
-    const task = await firstValueFrom(this.userService.create(newUserData));
-    return task;
+    // const user = await firstValueFrom(this.userService.create(newUserData));
+    // return user;
+    console.log(newUserData);
+    return new User();
   }
 
   @Mutation(() => Boolean)
