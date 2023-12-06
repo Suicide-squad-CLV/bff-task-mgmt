@@ -1,6 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsOptional, MaxLength } from 'class-validator';
-import { User } from 'src/user/entity/user.entity';
 
 @InputType()
 export class NewTaskInput {
@@ -13,7 +12,7 @@ export class NewTaskInput {
   @MaxLength(500)
   description?: string;
 
-  @Field(() => User)
+  @Field()
   @IsOptional()
-  user: User;
+  assignUserId: string;
 }

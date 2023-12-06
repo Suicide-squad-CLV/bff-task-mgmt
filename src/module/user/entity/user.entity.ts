@@ -27,10 +27,10 @@ export class User {
   @Field({ nullable: true, defaultValue: false })
   isDeleted?: boolean;
 
-  @Field({ defaultValue: new Date() })
+  @Field(() => Date, { defaultValue: new Date() })
   createDate: Date;
 
-  @Field({ defaultValue: new Date() })
+  @Field(() => Date, { defaultValue: new Date() })
   updateDate: Date;
 
   @Field(() => [Task])

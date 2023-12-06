@@ -1,4 +1,4 @@
-export interface TaskList {
+export interface TaskInfo {
   title: string;
   assignUserId: string;
 }

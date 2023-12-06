@@ -1,0 +1,64 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @upper on FIELD_DEFINITION
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  addTask(newTaskData: NewTaskInput!): Task!
+  addUser(newUserData: NewUserInput!): User!
+  removeTask(id: Int!): Boolean!
+  removeUser(id: String!): Boolean!
+}
+
+input NewTaskInput {
+  assignUserId: String!
+  description: String
+  title: String!
+}
+
+input NewUserInput {
+  avatar: String
+  email: String!
+  fullName: String!
+  id: String! = "eec9fe26-6e5f-4295-b622-38bd7981e92c"
+  password: String!
+}
+
+type Query {
+  task(id: Int!): Task!
+  tasks(
+    """Assigned User ID"""
+    assignUserId: String!
+    title: String!
+  ): [Task!]!
+  user(id: String!): User!
+  users(email: String!, fullName: String!): [User!]!
+}
+
+type Task {
+  assignUser: User!
+  id: Int!
+  isDeleted: Boolean
+  taskDescription: String
+  taskTitle: String!
+}
+
+type User {
+  avatar: String
+  createDate: DateTime!
+  email: String!
+  fullName: String!
+  hasChangePassword: Boolean
+  id: ID!
+  isDeleted: Boolean
+  password: String!
+  refreshToken: String
+  tasks: [Task!]!
+  updateDate: DateTime!
+}

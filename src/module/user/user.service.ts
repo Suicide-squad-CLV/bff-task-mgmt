@@ -1,15 +1,15 @@
 import { Inject, OnModuleInit, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-import { UserById } from './interface/User-by-id.interface';
 import { User } from './entity/User.entity';
-import { UserList } from './interface/user-list.interface';
+import { UserId } from './interface/user-id.interface';
+import { UserInfo } from './interface/user-info.interface';
 import { UserArgs } from './dto/User-args.dto';
 import { NewUserInput } from './dto/new-User-input.dto';
 
 interface UserGRPCService {
-  findOne(data: UserById): Observable<User>;
-  findMany(data: UserList): Observable<User[]>;
+  findOne(data: UserId): Observable<User>;
+  findMany(data: UserInfo): Observable<User[]>;
 }
 
 @Injectable()

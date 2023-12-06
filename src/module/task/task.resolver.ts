@@ -14,6 +14,7 @@ import { TaskArgs } from './dto/task-args.dto';
 import { TaskService } from './task.service';
 import { UserService } from 'src/user/user.service';
 import { firstValueFrom } from 'rxjs';
+import { User } from 'src/user/entity/user.entity';
 
 @Resolver(() => Task)
 export class TaskResolver {
@@ -48,8 +49,8 @@ export class TaskResolver {
   }
 
   @ResolveField()
-  async user(@Parent() task: Task) {
+  async assignUser(@Parent() task: Task): Promise<User> {
     const { assignUser } = task;
-    return this.userService.findOneById(assignUser.id);
+    return firstValueFrom(this.userService.findOneById(assignUser.id));
   }
 }

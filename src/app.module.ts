@@ -8,9 +8,13 @@ import {
 } from '@apollo/server/plugin/landingPage/default';
 import { join } from 'path';
 import { upperDirectiveTransformer } from './graphql/directive/upper-case.directive';
+import { TaskModule } from './module/task/task.module';
+import { UserModule } from './module/user/user.module';
 
 @Module({
   imports: [
+    TaskModule,
+    UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
@@ -25,6 +29,7 @@ import { upperDirectiveTransformer } from './graphql/directive/upper-case.direct
           }),
         ],
       },
+      playground: false,
       plugins: [
         // Install a landing page plugin via Apollo Sandbox based on NODE_ENV
         // Skip using ApolloServerPluginLandingPageGraphQLPlayground

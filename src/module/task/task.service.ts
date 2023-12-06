@@ -1,15 +1,15 @@
 import { Inject, OnModuleInit, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-import { TaskById } from './interface/task-by-id.interface';
-import { TaskList } from './interface/task-list.interface';
+import { TaskId } from './interface/task-id.interface';
+import { TaskInfo } from './interface/task-info.interface';
 import { Task } from './entity/task.entity';
 import { TaskArgs } from './dto/task-args.dto';
 import { NewTaskInput } from './dto/new-task-input.dto';
 
 interface TaskGRPCService {
-  findOne(data: TaskById): Observable<Task>;
-  findMany(data: TaskList): Observable<Task[]>;
+  findOne(data: TaskId): Observable<Task>;
+  findMany(data: TaskInfo): Observable<Task[]>;
 }
 
 @Injectable()
