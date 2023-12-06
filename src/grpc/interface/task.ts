@@ -21,18 +21,22 @@ export interface Task {
   assignUserId: string;
 }
 
+export interface TaskList {
+  tasks: Task[];
+}
+
 export const TASK_PACKAGE_NAME = "task";
 
 export interface TaskGRPCServiceClient {
   findOne(request: TaskId): Observable<Task>;
 
-  findMany(request: TaskInfo): Observable<Task>;
+  findMany(request: TaskInfo): Observable<TaskList>;
 }
 
 export interface TaskGRPCServiceController {
   findOne(request: TaskId): Promise<Task> | Observable<Task> | Task;
 
-  findMany(request: TaskInfo): Observable<Task>;
+  findMany(request: TaskInfo): Promise<TaskList> | Observable<TaskList> | TaskList;
 }
 
 export function TaskGRPCServiceControllerMethods() {

@@ -26,18 +26,22 @@ export interface User {
   updateDate: string;
 }
 
+export interface UserList {
+  users: User[];
+}
+
 export const USER_PACKAGE_NAME = "user";
 
 export interface UserGRPCServiceClient {
   findOne(request: UserId): Observable<User>;
 
-  findMany(request: UserInfo): Observable<User>;
+  findMany(request: UserInfo): Observable<UserList>;
 }
 
 export interface UserGRPCServiceController {
   findOne(request: UserId): Promise<User> | Observable<User> | User;
 
-  findMany(request: UserInfo): Observable<User>;
+  findMany(request: UserInfo): Promise<UserList> | Observable<UserList> | UserList;
 }
 
 export function UserGRPCServiceControllerMethods() {

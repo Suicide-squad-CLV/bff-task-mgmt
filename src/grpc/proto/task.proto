@@ -4,7 +4,7 @@ package task;
 
 service TaskGRPCService {
   rpc FindOne (TaskId) returns (Task);
-  rpc FindMany (TaskInfo) returns (stream Task);
+  rpc FindMany (TaskInfo) returns (TaskList);
 }
 
 message TaskId {
@@ -22,4 +22,8 @@ message Task {
   string taskDescription = 3;
   bool isDeleted = 4;
   string assignUserId = 5;
+}
+
+message TaskList {
+  repeated Task tasks = 1;
 }
