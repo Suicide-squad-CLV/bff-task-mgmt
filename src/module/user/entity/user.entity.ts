@@ -4,10 +4,10 @@ import { Task } from 'src/module/task/entity/task.entity';
 @ObjectType()
 export class User {
   @Field(() => ID)
-  id: string;
+  id: number;
 
   @Field()
-  fullName: string;
+  fullname: string;
 
   @Field()
   email: string;
@@ -27,12 +27,12 @@ export class User {
   @Field({ nullable: true, defaultValue: false })
   isDeleted?: boolean;
 
-  @Field(() => Date, { defaultValue: new Date() })
-  createDate: Date;
+  @Field({ nullable: true })
+  createdAt: string;
 
-  @Field(() => Date, { defaultValue: new Date() })
-  updateDate: Date;
+  @Field({ nullable: true })
+  updatedAt: string;
 
   @Field(() => [Task])
-  tasks: [Task];
+  tasks?: [Task];
 }

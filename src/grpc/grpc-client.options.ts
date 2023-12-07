@@ -4,14 +4,14 @@ import { join } from 'path';
 
 const getGrpcOptions = (
   configService: ConfigService,
-  module: string,
+  packageName: string,
   protoFile: string,
 ): ClientOptions => {
   return {
     transport: Transport.GRPC,
     options: {
       url: configService.get<string>('APP_GRPC_URL'),
-      package: module,
+      package: packageName,
       protoPath: [join(__dirname, `../grpc/proto/${protoFile}.proto`)],
     },
   };

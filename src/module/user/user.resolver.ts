@@ -1,5 +1,5 @@
 import { User } from 'src/module/user/entity/user.entity';
-import { NotFoundException } from '@nestjs/common';
+// import { NotFoundException } from '@nestjs/common';
 import {
   Query,
   Args,
@@ -8,10 +8,10 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import { UserArgs } from './dto/user-args.dto';
-import { NewUserInput } from './dto/new-user-input.dto';
 import { TaskService } from 'src/module/task/task.service';
 import { UserService } from './user.service';
+import UserDataInput from './dto/user-input.dto';
+// import { firstValueFrom } from 'rxjs';
 
 @Resolver(() => User)
 export class UserResolver {
@@ -20,24 +20,22 @@ export class UserResolver {
     private readonly userService: UserService,
   ) {}
 
-  @Query(() => User)
+  @Query(() => User, { name: 'getUser' })
   async user(@Args('id') id: string): Promise<User> {
-    const user = await this.userService.findOneById(id);
-    if (!user) {
-      throw new NotFoundException(id);
-    }
-    return user;
+    // const user = await firstValueFrom(this.userService.findOneById(id));
+    // if (!user) {
+    //   throw new NotFoundException(id);
+    // }
+    // return user;
+    console.log(id);
+    return new User();
   }
 
-  @Query(() => [User])
-  async users(@Args() userArgs: UserArgs): Promise<User[]> {
-    return this.userService.findAll(userArgs);
-  }
-
-  @Mutation(() => User)
-  async addUser(@Args('newUserData') newUserData: NewUserInput): Promise<User> {
-    const user = await this.userService.create(newUserData);
-    return user;
+  @Query(() => [User], { name: 'getAllUsers' })
+  async users(@Args() userArgs: UserDataInput): Promise<User[]> {
+    // return firstValueFrom(this.userService.findAll(userArgs));
+    console.log(userArgs);
+    return [];
   }
 
   @Mutation(() => Boolean)
@@ -48,6 +46,6 @@ export class UserResolver {
   @ResolveField()
   async tasks(@Parent() user: User) {
     const { id } = user;
-    return this.taskService.findAll({ assignUserId: id });
+    return this.taskService.findAll({ assignUserId: id.toString() });
   }
 }

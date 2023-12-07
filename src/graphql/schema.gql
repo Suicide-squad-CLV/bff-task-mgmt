@@ -4,14 +4,26 @@
 
 directive @upper on FIELD_DEFINITION
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+type ErrorType {
+  code: String
+  message: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type LoginResponse {
+  error: ErrorType
+  token: Token!
+  user: User!
+}
 
 type Mutation {
   addTask(newTaskData: NewTaskInput!): Task!
-  addUser(newUserData: NewUserInput!): User!
+  login(loginInput: LoginInput!): LoginResponse!
+  register(registerInput: RegisterInput!): RegisterResponse!
   removeTask(id: Int!): Boolean!
   removeUser(id: String!): Boolean!
 }
@@ -22,26 +34,35 @@ input NewTaskInput {
   title: String!
 }
 
-input NewUserInput {
-  avatar: String
-  email: String!
-  fullName: String!
-  id: String! = "fc75e5ef-3f88-482b-8a86-cd8d979dbb6a"
-  password: String!
-}
-
 type Query {
+  getAllUsers(email: String!, fullName: String!): [User!]!
+  getUser(id: String!): User!
+  profile: User!
   task(id: Int!): Task!
   tasks(
-    """Assigned User ID"""
+    """
+    Assigned User ID
+    """
     assignUserId: String
 
-    """Assigned User Name"""
+    """
+    Assigned User Name
+    """
     assignUserName: String
     title: String!
   ): [Task!]!
-  user(id: String!): User!
-  users(email: String!, fullName: String!): [User!]!
+}
+
+input RegisterInput {
+  email: String!
+  fullname: String!
+  password: String!
+}
+
+type RegisterResponse {
+  error: ErrorType
+  token: Token
+  user: User
 }
 
 type Task {
@@ -52,16 +73,22 @@ type Task {
   taskTitle: String!
 }
 
+type Token {
+  expiration: Float!
+  token: String!
+  type: String!
+}
+
 type User {
   avatar: String
-  createDate: DateTime!
+  createdAt: String
   email: String!
-  fullName: String!
+  fullname: String!
   hasChangePassword: Boolean
   id: ID!
   isDeleted: Boolean
   password: String!
   refreshToken: String
   tasks: [Task!]!
-  updateDate: DateTime!
+  updatedAt: String
 }

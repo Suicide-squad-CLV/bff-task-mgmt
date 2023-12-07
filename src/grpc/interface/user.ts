@@ -4,30 +4,42 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "user";
 
-export interface UserId {
-  id: string;
+export interface Users {
+  users: User[];
 }
 
-export interface UserInfo {
-  fullName: string;
+export interface Empty {
+}
+
+export interface RegisterDto {
+  fullname: string;
+  email: string;
+  password: string;
+}
+
+export interface UserCreadentials {
+  email: string;
+  password: string;
+}
+
+export interface UserId {
+  id: number;
+}
+
+export interface UserEmail {
   email: string;
 }
 
 export interface User {
-  id: string;
-  fullName: string;
+  id: number;
+  fullname: string;
   email: string;
   password: string;
   avatar: string;
   refreshToken: string;
-  hasChangePassword: boolean;
   isDeleted: boolean;
-  createDate: string;
-  updateDate: string;
-}
-
-export interface UserList {
-  users: User[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export const USER_PACKAGE_NAME = "user";
@@ -35,18 +47,30 @@ export const USER_PACKAGE_NAME = "user";
 export interface UserGRPCServiceClient {
   findOne(request: UserId): Observable<User>;
 
-  findMany(request: UserInfo): Observable<UserList>;
+  findByEmail(request: UserEmail): Observable<User>;
+
+  findByCredentials(request: UserCreadentials): Observable<User>;
+
+  findMany(request: Empty): Observable<Users>;
+
+  create(request: RegisterDto): Observable<User>;
 }
 
 export interface UserGRPCServiceController {
   findOne(request: UserId): Promise<User> | Observable<User> | User;
 
-  findMany(request: UserInfo): Promise<UserList> | Observable<UserList> | UserList;
+  findByEmail(request: UserEmail): Promise<User> | Observable<User> | User;
+
+  findByCredentials(request: UserCreadentials): Promise<User> | Observable<User> | User;
+
+  findMany(request: Empty): Promise<Users> | Observable<Users> | Users;
+
+  create(request: RegisterDto): Promise<User> | Observable<User> | User;
 }
 
 export function UserGRPCServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["findOne", "findMany"];
+    const grpcMethods: string[] = ["findOne", "findByEmail", "findByCredentials", "findMany", "create"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("UserGRPCService", method)(constructor.prototype[method], method, descriptor);
