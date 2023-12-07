@@ -1,10 +1,17 @@
 ## Description
 
-Backend for Frontend source in Task Managment Project.
+Backend for Frontend (BFF) source in Task Managment Project.
 
-Backend for Frontend is a part that placed between Frontend and Backend services.
+Backend for Frontend (BFF) is a part that placed between Frontend (FE) and Backend services (BES)
 
-This part will receive request from Frontend via GraphQL API and then call to Backend Services for data via gRPC
+This part will receive request from FE via GraphQL API and then call to BES for data via gRPC
+
+BFF processing steps:
+
+1. BFF receives Arguments of GraphQL API if needed
+2. BFF converts Arguments in GraphQL to Arguments type in gRPC
+3. Call gRPC services in BES with converted Arguments in step 2
+4. BFF receive Result from BES and convert BES Response to GraphQL Response
 
 ## Installation
 
