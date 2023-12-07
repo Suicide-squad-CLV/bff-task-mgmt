@@ -11,12 +11,13 @@ import { upperDirectiveTransformer } from './graphql/directive/upper-case.direct
 import { TaskModule } from './module/task/task.module';
 import { UserModule } from './module/user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './module/auth/auth.module';
 
 @Module({
   imports: [
-    TaskModule,
-    UserModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
@@ -43,6 +44,9 @@ import { ConfigModule } from '@nestjs/config';
           : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
       ],
     }),
+    AuthModule,
+    UserModule,
+    TaskModule,
   ],
 })
 export class AppModule {}

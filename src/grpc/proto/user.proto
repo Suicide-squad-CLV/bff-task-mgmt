@@ -3,32 +3,46 @@ syntax = "proto3";
 package user;
 
 service UserGRPCService {
-  rpc FindOne (UserId) returns (User);
-  rpc FindMany (UserInfo) returns (UserList);
+  rpc FindOne (UserId) returns (User) {}
+  rpc FindByEmail (UserEmail) returns (User) {}
+  rpc FindByCredentials (UserCreadentials) returns (User) {}
+  rpc FindMany (Empty) returns (Users) {}
+  rpc Create (RegisterDto) returns (User) {}
+}
+
+message Users {
+  repeated User users = 1;
+}
+
+message Empty {}
+
+message RegisterDto {
+  string fullname = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message UserCreadentials {
+  string email = 1;
+  string password = 2;
 }
 
 message UserId {
-  string id = 1;
+  int32 id = 1;
 }
 
-message UserInfo {
-  string fullName = 1;
-  string email = 2;
+message UserEmail {
+  string email = 1;
 }
 
 message User {
-  string id = 1;
-  string fullName = 2;
+  int32 id = 1;
+  string fullname = 2;
   string email = 3;
   string password = 4;
   string avatar = 5;
   string refreshToken = 6;
-  bool hasChangePassword = 7;
-  bool isDeleted = 8;
-  string createDate = 9;
-  string updateDate = 10;
-}
-
-message UserList {
-  repeated User users = 1;
+  bool isDeleted = 7;
+  string createdAt = 8;
+  string updatedAt = 9;
 }
