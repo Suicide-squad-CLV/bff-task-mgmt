@@ -3,17 +3,17 @@ syntax = "proto3";
 package task;
 
 service TaskGRPCService {
-  rpc FindOne (TaskId) returns (Task);
-  rpc FindMany (TaskInfo) returns (TaskList);
+  rpc FindOne (FindTaskId) returns (Task);
+  rpc FindMany (FindTaskInfo) returns (TaskList);
 }
 
-message TaskId {
+message FindTaskId {
   int32 id = 1;
 }
 
-message TaskInfo {
+message FindTaskInfo {
   string title = 1;
-  string assignUserId = 2;
+  string assignUserName = 2;
 }
 
 message Task {

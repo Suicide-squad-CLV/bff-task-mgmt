@@ -7,8 +7,11 @@ import {
   TASK_GR_PC_SERVICE_NAME,
   TASK_PACKAGE_NAME,
   TaskGRPCServiceClient,
+  Task as TaskGRPC,
+  TaskList,
 } from 'src/grpc/interface/task';
 import { Task } from './entity/task.entity';
+import { lastValueFrom, map } from 'rxjs';
 
 @Injectable()
 export class TaskService implements OnModuleInit {
@@ -30,13 +33,22 @@ export class TaskService implements OnModuleInit {
   }
 
   findAll(taskArgs: TaskArgs): Promise<Task[]> {
-    // TODO: Convert TaskList interface from gRPC Service to GraphQL Task[] entity
-    // return this.taskgRPCService.findMany({
-    //   title: taskArgs.title,
-    //   assignUserId: taskArgs.assignUserId,
-    // });
     console.log(taskArgs);
-    return null;
+
+    // TODO: Convert TaskList interface from gRPC Service to GraphQL Task[] entity
+    return lastValueFrom(
+      this.taskgRPCService
+        .findMany({
+          title: taskArgs.title,
+          assignUserName: taskArgs.assignUserName,
+        })
+        .pipe(
+          map((response: TaskList) =>
+            response.tasks.map((task: TaskGRPC) => new Task(task)),
+          ),
+        ),
+    );
+    // return null;
   }
 
   create(newTaskData: NewTaskInput): Promise<Task> {

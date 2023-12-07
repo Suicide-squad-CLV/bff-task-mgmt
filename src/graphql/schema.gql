@@ -26,7 +26,7 @@ input NewUserInput {
   avatar: String
   email: String!
   fullName: String!
-  id: String! = "bf0ebf8b-500a-49b0-bdd4-169c54d6e37c"
+  id: String! = "fc75e5ef-3f88-482b-8a86-cd8d979dbb6a"
   password: String!
 }
 
@@ -34,7 +34,10 @@ type Query {
   task(id: Int!): Task!
   tasks(
     """Assigned User ID"""
-    assignUserId: String!
+    assignUserId: String
+
+    """Assigned User Name"""
+    assignUserName: String
     title: String!
   ): [Task!]!
   user(id: String!): User!
