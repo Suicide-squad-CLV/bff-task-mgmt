@@ -20,7 +20,7 @@ export class UserService implements OnModuleInit {
     );
   }
 
-  findOneById(id: string): Observable<User> {
+  findOneById(id: number): Observable<User> {
     // TODO: Convert User interface from gRPC Service to GraphQL User entity
     return this.usergRPCService.findOne({ id: +id });
   }
