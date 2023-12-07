@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 
 @InputType()
-class RegisterDto {
+class RegisterInput {
   @Field()
   @IsNotEmpty({ message: 'Fullname is required.' })
   @IsString({ message: 'Fullname must be a string.' })
@@ -26,4 +26,4 @@ class RegisterDto {
   email: string;
 }
 
-export default RegisterDto;
+export default RegisterInput;

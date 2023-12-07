@@ -1,22 +1,26 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { GraphQLErrorFilter } from 'src/filters/custom-exception.filter';
-import { UseFilters } from '@nestjs/common';
+import { GraphQLErrorFilter } from 'src/common/filters/custom-exception.filter';
+import { UseFilters, UseGuards } from '@nestjs/common';
 import { RegisterResponse } from './types/register-response.type';
-import RegisterDto from './dto/register.dto';
+import { LoginResponse } from './types/login-response.type';
+import RegisterInput from './dto/register.dto';
+import { User } from '../user/entity/user.entity';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import LoginInput from './dto/login.dto';
+import { GqlAuthGuard } from './guards/gql-auth.guard';
 
 @Resolver()
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
   @UseFilters(GraphQLErrorFilter)
-  @Mutation(() => RegisterResponse)
+  @Mutation(() => RegisterResponse, { name: 'register' })
   async register(
-    @Args('registerInput') registerDto: RegisterDto,
+    @Args('registerInput') registerDto: RegisterInput,
   ): Promise<RegisterResponse> {
     try {
-      const res = await this.authService.register(registerDto);
-      console.log('res', res);
+      return await this.authService.register(registerDto);
     } catch (error) {
       return {
         error: {
@@ -27,11 +31,15 @@ export class AuthResolver {
     }
   }
 
-  // @Mutation(() => LoginResponse)
-  // async login(
-  //   @Args('loginInput') loginDto: LoginDto,
-  //   @Context() context: { res: Response },
-  // ) {
-  //   return this.authService.login(loginDto, context.res);
-  // }
+  @Mutation(() => LoginResponse, { name: 'login' })
+  @UseGuards(GqlAuthGuard)
+  async login(@Args('loginInput') loginInput: LoginInput, @Context() context) {
+    return this.authService.login(context.user);
+  }
+
+  @Query(() => User, { name: 'profile' })
+  @UseGuards(JwtAuthGuard)
+  async profile(@Context() context): Promise<User> {
+    return await this.authService.profile(context.req.user);
+  }
 }

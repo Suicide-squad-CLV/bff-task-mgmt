@@ -2,7 +2,7 @@ import { ArgsType, Field } from '@nestjs/graphql';
 import { IsOptional, MaxLength } from 'class-validator';
 
 @ArgsType()
-export class UserArgs {
+class UserDataInput {
   @Field()
   @IsOptional()
   @MaxLength(200)
@@ -13,3 +13,5 @@ export class UserArgs {
   @MaxLength(200)
   email?: string;
 }
+
+export default UserDataInput;

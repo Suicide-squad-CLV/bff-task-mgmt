@@ -8,10 +8,9 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import { UserArgs } from './dto/user-args.dto';
-import { NewUserInput } from './dto/new-user-input.dto';
 import { TaskService } from 'src/module/task/task.service';
 import { UserService } from './user.service';
+import UserDataInput from './dto/user-input.dto';
 // import { firstValueFrom } from 'rxjs';
 
 @Resolver(() => User)
@@ -21,7 +20,7 @@ export class UserResolver {
     private readonly userService: UserService,
   ) {}
 
-  @Query(() => User)
+  @Query(() => User, { name: 'getUser' })
   async user(@Args('id') id: string): Promise<User> {
     // const user = await firstValueFrom(this.userService.findOneById(id));
     // if (!user) {
@@ -32,19 +31,11 @@ export class UserResolver {
     return new User();
   }
 
-  @Query(() => [User])
-  async users(@Args() userArgs: UserArgs): Promise<User[]> {
+  @Query(() => [User], { name: 'getAllUsers' })
+  async users(@Args() userArgs: UserDataInput): Promise<User[]> {
     // return firstValueFrom(this.userService.findAll(userArgs));
     console.log(userArgs);
     return [];
-  }
-
-  @Mutation(() => User)
-  async addUser(@Args('newUserData') newUserData: NewUserInput): Promise<User> {
-    // const user = await firstValueFrom(this.userService.create(newUserData));
-    // return user;
-    console.log(newUserData);
-    return new User();
   }
 
   @Mutation(() => Boolean)
@@ -55,6 +46,6 @@ export class UserResolver {
   @ResolveField()
   async tasks(@Parent() user: User) {
     const { id } = user;
-    return this.taskService.findAll({ assignUserId: id });
+    return this.taskService.findAll({ assignUserId: id.toString() });
   }
 }
