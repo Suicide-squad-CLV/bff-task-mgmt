@@ -40,8 +40,15 @@ type Query {
   profile: User!
   task(id: Int!): Task!
   tasks(
-    """Assigned User ID"""
-    assignUserId: String!
+    """
+    Assigned User ID
+    """
+    assignUserId: String
+
+    """
+    Assigned User Name
+    """
+    assignUserName: String
     title: String!
   ): [Task!]!
 }
