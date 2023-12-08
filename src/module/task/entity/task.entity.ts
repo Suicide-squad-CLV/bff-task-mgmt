@@ -16,8 +16,8 @@ export class Task {
   @Field({ nullable: true, defaultValue: false })
   isDeleted?: boolean;
 
-  @Field(() => User)
-  assignUser: User;
+  @Field(() => User, { nullable: true })
+  assignUser?: User;
 
   constructor(task: TaskGRPC) {
     this.id = task.id;
