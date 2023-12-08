@@ -10,6 +10,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import RegisterInput from './dto/register.dto';
 import { JwtPayload, Token } from './types/token.type';
+import ForgotPasswordInput from './dto/forgotPassword.dto';
+import UpdatePasswordInput from './dto/updatePassword.dto';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -69,6 +71,20 @@ export class AuthService implements OnModuleInit {
     );
     profileUser.password = undefined;
     return profileUser;
+  }
+
+  async forgotPassword(emailInput: ForgotPasswordInput) {
+    await firstValueFrom(this.usergRPCService.forgotPassword(emailInput));
+    return {
+      success: true,
+      message: 'Forgot password email already sent',
+    };
+  }
+
+  async updatePassword(passwordInput: UpdatePasswordInput) {
+    return await firstValueFrom(
+      this.usergRPCService.updatePassword(passwordInput),
+    );
   }
 
   async validateUser(email: string, password: string): Promise<any> {
