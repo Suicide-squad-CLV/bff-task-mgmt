@@ -46,11 +46,7 @@ type Query {
   profile: User!
   task(id: Int!): Task!
   tasks(
-    """Assigned User ID"""
-    assignUserId: String
-
-    """Assigned User Name"""
-    assignUserName: String
+    """Task title"""
     title: String
   ): [Task!]!
 }
@@ -74,7 +70,7 @@ type SuccessReponse {
 }
 
 type Task {
-  assignUser: User!
+  assignUser: User
   id: Int!
   isDeleted: Boolean
   taskDescription: String

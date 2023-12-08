@@ -40,7 +40,6 @@ export class TaskService implements OnModuleInit {
       this.taskgRPCService
         .findMany({
           title: taskArgs.title,
-          assignUserName: taskArgs.assignUserName,
         })
         .pipe(
           map((response: TaskList) =>

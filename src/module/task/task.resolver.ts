@@ -49,9 +49,9 @@ export class TaskResolver {
 
   @ResolveField()
   async assignUser(@Parent() task: Task): Promise<User> {
-    const { assignUser } = task;
-    console.log('assignUser', assignUser);
+    // const { assignUser } = task;
+    // console.log('assignUser', assignUser);
     // return this.userService.findOneById(assignUser.id);
-    return null;
+    return task.assignUser;
   }
 }

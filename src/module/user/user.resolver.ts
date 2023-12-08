@@ -63,7 +63,8 @@ export class UserResolver {
 
   @ResolveField()
   async tasks(@Parent() user: User) {
-    const { id } = user;
-    return this.taskService.findAll({ assignUserId: id.toString() });
+    return user.tasks;
+    // const { id } = user;
+    // return this.taskService.findAll({ assignUserId: id.toString() });
   }
 }
