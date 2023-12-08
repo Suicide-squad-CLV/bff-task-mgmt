@@ -4,13 +4,12 @@ import { Observable } from "rxjs";
 
 export const protobufPackage = "task";
 
-export interface FindTaskId {
+export interface FindTaskById {
   id: number;
 }
 
-export interface FindTaskInfo {
+export interface FindTasks {
   title: string;
-  assignUserName: string;
 }
 
 export interface Task {
@@ -28,15 +27,15 @@ export interface TaskList {
 export const TASK_PACKAGE_NAME = "task";
 
 export interface TaskGRPCServiceClient {
-  findOne(request: FindTaskId): Observable<Task>;
+  findOne(request: FindTaskById): Observable<Task>;
 
-  findMany(request: FindTaskInfo): Observable<TaskList>;
+  findMany(request: FindTasks): Observable<TaskList>;
 }
 
 export interface TaskGRPCServiceController {
-  findOne(request: FindTaskId): Promise<Task> | Observable<Task> | Task;
+  findOne(request: FindTaskById): Promise<Task> | Observable<Task> | Task;
 
-  findMany(request: FindTaskInfo): Promise<TaskList> | Observable<TaskList> | TaskList;
+  findMany(request: FindTasks): Promise<TaskList> | Observable<TaskList> | TaskList;
 }
 
 export function TaskGRPCServiceControllerMethods() {
