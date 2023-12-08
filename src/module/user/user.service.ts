@@ -1,11 +1,10 @@
 import { Inject, OnModuleInit, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import {
   USER_GR_PC_SERVICE_NAME,
   USER_PACKAGE_NAME,
   UserGRPCServiceClient,
-  User,
 } from 'src/grpc/interface/user';
 
 @Injectable()
@@ -20,28 +19,16 @@ export class UserService implements OnModuleInit {
     );
   }
 
-  findOneById(id: number): Observable<User> {
-    // TODO: Convert User interface from gRPC Service to GraphQL User entity
-    return this.usergRPCService.findOne({ id: +id });
+  async findOneById(id: number) {
+    return await firstValueFrom(this.usergRPCService.findOne({ id }));
   }
 
-  // findAll(UserArgs: UserArgs): Observable<User[]> {
-  //   // TODO: Convert UserList interface from gRPC Service to GraphQL [User] entity
-  //   const stream = this.usergRPCService.findMany({
-  //     fullName: UserArgs.fullName,
-  //     email: UserArgs.email,
-  //   });
-  //   return stream.pipe(toArray());
-  //   // const userList = this.usergRPCService.findMany({
-  //   //   fullName: UserArgs.fullName,
-  //   //   email: UserArgs.email,
-  //   // });
-  //   // return userList;
-  // }
+  async findAll() {
+    const { users } = await firstValueFrom(this.usergRPCService.findMany({}));
+    return users;
+  }
 
-  remove(id: string): Observable<User> {
-    // TODO: Implement Remove gRPC Service
-    console.log(id);
-    return null;
+  async remove(id: number) {
+    return await firstValueFrom(this.usergRPCService.removeUser({ id: id }));
   }
 }

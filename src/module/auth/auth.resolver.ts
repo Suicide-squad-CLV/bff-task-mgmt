@@ -9,6 +9,9 @@ import { User } from '../user/entity/user.entity';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import LoginInput from './dto/login.dto';
 import { GqlAuthGuard } from './guards/gql-auth.guard';
+import ForgotPasswordInput from './dto/forgotPassword.dto';
+import { SuccessReponse } from './types/normal-response.type';
+import UpdatePasswordInput from './dto/updatePassword.dto';
 
 @Resolver()
 export class AuthResolver {
@@ -41,5 +44,17 @@ export class AuthResolver {
   @UseGuards(JwtAuthGuard)
   async profile(@Context() context): Promise<User> {
     return await this.authService.profile(context.req.user);
+  }
+
+  @Mutation(() => SuccessReponse, { name: 'forgotPassword', nullable: true })
+  async forgotPassword(@Args('emailInput') emailInput: ForgotPasswordInput) {
+    return this.authService.forgotPassword(emailInput);
+  }
+
+  @Mutation(() => SuccessReponse, { name: 'updatePassword', nullable: true })
+  async updatePassword(
+    @Args('passwordInput') passwordInput: UpdatePasswordInput,
+  ) {
+    return this.authService.updatePassword(passwordInput);
   }
 }
