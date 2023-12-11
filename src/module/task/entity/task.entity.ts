@@ -27,6 +27,7 @@ export class GQLTask {
     this.taskDescription = task.taskDescription;
     this.assignUser = {
       ...task.assignUser,
+      refreshToken: '',
       password: '',
       createdAt: '',
       updatedAt: '',
