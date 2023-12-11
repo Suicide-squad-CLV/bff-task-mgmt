@@ -13,6 +13,19 @@ input ForgotPasswordInput {
   email: String!
 }
 
+type GQLStatus {
+  id: String!
+  statusName: String!
+}
+
+type GQLTask {
+  assignUser: User
+  id: Int!
+  status: GQLStatus
+  taskDescription: String
+  taskTitle: String!
+}
+
 input LoginInput {
   email: String!
   password: String!
@@ -25,7 +38,7 @@ type LoginResponse {
 }
 
 type Mutation {
-  addTask(newTaskData: NewTaskInput!): Task!
+  addTask(newTaskData: NewTaskInput!): GQLTask!
   forgotPassword(emailInput: ForgotPasswordInput!): SuccessReponse
   login(loginInput: LoginInput!): LoginResponse!
   register(registerInput: RegisterInput!): RegisterResponse!
@@ -44,11 +57,17 @@ type Query {
   getAllUsers: [User!]!
   getUser(id: String!): User!
   profile: User!
-  task(id: Int!): Task!
+  task(id: Int!): GQLTask!
   tasks(
+    """Task status"""
+    statusId: String
+
     """Task title"""
     title: String
-  ): [Task!]!
+
+    """Assign user Id"""
+    userId: String
+  ): [GQLTask!]!
 }
 
 input RegisterInput {
@@ -67,14 +86,6 @@ type SuccessReponse {
   error: ErrorType
   message: String!
   success: Boolean!
-}
-
-type Task {
-  assignUser: User
-  id: Int!
-  isDeleted: Boolean
-  taskDescription: String
-  taskTitle: String!
 }
 
 type Token {
@@ -98,6 +109,6 @@ type User {
   isDeleted: Boolean
   password: String!
   refreshToken: String
-  tasks: [Task!]!
+  tasks: [GQLTask!]!
   updatedAt: String
 }
