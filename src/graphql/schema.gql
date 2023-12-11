@@ -57,6 +57,7 @@ type Query {
   getAllUsers: [User!]!
   getUser(id: String!): User!
   profile: User!
+  statusList: [GQLStatus!]!
   task(id: Int!): GQLTask!
   tasks(
     """Task status"""
