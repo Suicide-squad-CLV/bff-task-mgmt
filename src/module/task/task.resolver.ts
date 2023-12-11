@@ -23,6 +23,15 @@ export class TaskResolver {
     private readonly userService: UserService,
   ) {}
 
+  @Query(() => [GQLStatus])
+  async statusList(): Promise<GQLStatus[]> {
+    const statusList = await this.taskService.findAllStatus();
+    if (!statusList) {
+      throw new NotFoundException();
+    }
+    return statusList;
+  }
+
   @Query(() => GQLTask)
   async task(@Args('id', { type: () => Int }) id: number): Promise<GQLTask> {
     const task = await this.taskService.findOneById(id);

@@ -8,9 +8,11 @@ import {
   TaskGRPCServiceClient,
   GRPCTask,
   GRPCTaskList,
+  GRPCStatusList,
 } from 'src/grpc/interface/task';
 import { GQLTask } from './entity/task.entity';
 import { lastValueFrom, map } from 'rxjs';
+import { GQLStatus } from './entity/status.entity';
 
 @Injectable()
 export class TaskService implements OnModuleInit {
@@ -29,6 +31,24 @@ export class TaskService implements OnModuleInit {
     // return this.taskgRPCService.findOne({ id: id });
     console.log(id);
     return null;
+  }
+
+  async findAllStatus(): Promise<GQLStatus[]> {
+    // lastValueFrom function converts Observable to Promise
+    return await lastValueFrom(
+      this.taskgRPCService.findAllStatus({}).pipe(
+        // Map each response from gRPC
+        map((response: GRPCStatusList) => {
+          if (response.statusList) {
+            // Convert GRPCStatusList in gRPC to GQLStatus[] in BFF
+            return response.statusList.map(
+              (status: GQLStatus) => new GQLStatus(status),
+            );
+          }
+          return [];
+        }),
+      ),
+    );
   }
 
   async findAll(taskArgs: TaskArgs): Promise<GQLTask[]> {
