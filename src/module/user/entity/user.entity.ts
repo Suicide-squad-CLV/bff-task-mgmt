@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
-import { Task } from 'src/module/task/entity/task.entity';
+import { GQLTask } from 'src/module/task/entity/task.entity';
 
 @ObjectType()
 export class User {
@@ -33,6 +33,6 @@ export class User {
   @Field({ nullable: true })
   updatedAt: string;
 
-  @Field(() => [Task])
-  tasks?: [Task];
+  @Field(() => [GQLTask])
+  tasks?: [GQLTask];
 }

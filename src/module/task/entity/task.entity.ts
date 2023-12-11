@@ -1,9 +1,10 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Task as TaskGRPC } from 'src/grpc/interface/task';
+import { GRPCTask } from 'src/grpc/interface/task';
 import { User } from 'src/module/user/entity/user.entity';
+import { GQLStatus } from './status.entity';
 
 @ObjectType()
-export class Task {
+export class GQLTask {
   @Field(() => Int)
   id: number;
 
@@ -13,16 +14,23 @@ export class Task {
   @Field({ nullable: true })
   taskDescription?: string;
 
-  @Field({ nullable: true, defaultValue: false })
-  isDeleted?: boolean;
-
   @Field(() => User, { nullable: true })
   assignUser?: User;
 
-  constructor(task: TaskGRPC) {
+  @Field(() => GQLStatus, { nullable: true })
+  status?: GQLStatus;
+
+  constructor(task: GRPCTask) {
+    // Map GRPCTask to GQLTask
     this.id = task.id;
     this.taskTitle = task.taskTitle;
     this.taskDescription = task.taskDescription;
-    this.isDeleted = task.isDeleted;
+    this.assignUser = {
+      ...task.assignUser,
+      password: '',
+      createdAt: '',
+      updatedAt: '',
+    };
+    this.status = task.status;
   }
 }

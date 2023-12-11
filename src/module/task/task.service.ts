@@ -1,16 +1,15 @@
 import { Inject, OnModuleInit, Injectable } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
-// import { Observable } from 'rxjs';
 import { TaskArgs } from './dto/task-args.dto';
 import { NewTaskInput } from './dto/new-task-input.dto';
 import {
   TASK_GR_PC_SERVICE_NAME,
   TASK_PACKAGE_NAME,
   TaskGRPCServiceClient,
-  Task as TaskGRPC,
-  TaskList,
+  GRPCTask,
+  GRPCTaskList,
 } from 'src/grpc/interface/task';
-import { Task } from './entity/task.entity';
+import { GQLTask } from './entity/task.entity';
 import { lastValueFrom, map } from 'rxjs';
 
 @Injectable()
@@ -25,38 +24,43 @@ export class TaskService implements OnModuleInit {
     );
   }
 
-  findOneById(id: number): Promise<Task> {
+  findOneById(id: number): Promise<GQLTask> {
     // TODO: Convert Task interface from gRPC Service to GraphQL Task entity
     // return this.taskgRPCService.findOne({ id: id });
     console.log(id);
     return null;
   }
 
-  findAll(taskArgs: TaskArgs): Promise<Task[]> {
-    console.log(taskArgs);
-
-    // TODO: Convert TaskList interface from gRPC Service to GraphQL Task[] entity
-    return lastValueFrom(
+  async findAll(taskArgs: TaskArgs): Promise<GQLTask[]> {
+    // lastValueFrom function converts Observable to Promise
+    return await lastValueFrom(
       this.taskgRPCService
         .findMany({
+          // gRPC parameter for FindMany Service
           title: taskArgs.title,
+          userId: taskArgs.userId,
+          statusId: taskArgs.statusId,
         })
         .pipe(
-          map((response: TaskList) =>
-            response.tasks.map((task: TaskGRPC) => new Task(task)),
-          ),
+          // Map each response from gRPC
+          map((response: GRPCTaskList) => {
+            if (response.tasks) {
+              // Convert GRPCTaskList in gRPC to GQLTask[] in BFF
+              return response.tasks.map((task: GRPCTask) => new GQLTask(task));
+            }
+            return [];
+          }),
         ),
     );
-    // return null;
   }
 
-  create(newTaskData: NewTaskInput): Promise<Task> {
+  create(newTaskData: NewTaskInput): Promise<GQLTask> {
     // TODO: Implement Create gRPC Service
     console.log(newTaskData);
     return null;
   }
 
-  remove(id: number): Promise<Task> {
+  remove(id: number): Promise<GQLTask> {
     // TODO: Implement Remove gRPC Service
     console.log(id);
     return null;

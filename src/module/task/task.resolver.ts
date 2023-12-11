@@ -1,4 +1,5 @@
-import { Task } from './entity/task.entity';
+import { GQLTask } from './entity/task.entity';
+import { GQLStatus } from './entity/status.entity';
 import { NotFoundException } from '@nestjs/common';
 import {
   Int,
@@ -15,15 +16,15 @@ import { TaskService } from './task.service';
 import { UserService } from 'src/module/user/user.service';
 import { User } from 'src/module/user/entity/user.entity';
 
-@Resolver(() => Task)
+@Resolver(() => GQLTask)
 export class TaskResolver {
   constructor(
     private readonly taskService: TaskService,
     private readonly userService: UserService,
   ) {}
 
-  @Query(() => Task)
-  async task(@Args('id', { type: () => Int }) id: number): Promise<Task> {
+  @Query(() => GQLTask)
+  async task(@Args('id', { type: () => Int }) id: number): Promise<GQLTask> {
     const task = await this.taskService.findOneById(id);
     if (!task) {
       throw new NotFoundException(id);
@@ -31,13 +32,15 @@ export class TaskResolver {
     return task;
   }
 
-  @Query(() => [Task])
-  async tasks(@Args() taskArgs: TaskArgs): Promise<Task[]> {
+  @Query(() => [GQLTask])
+  async tasks(@Args() taskArgs: TaskArgs): Promise<GQLTask[]> {
     return this.taskService.findAll(taskArgs);
   }
 
-  @Mutation(() => Task)
-  async addTask(@Args('newTaskData') newTaskData: NewTaskInput): Promise<Task> {
+  @Mutation(() => GQLTask)
+  async addTask(
+    @Args('newTaskData') newTaskData: NewTaskInput,
+  ): Promise<GQLTask> {
     const task = await this.taskService.create(newTaskData);
     return task;
   }
@@ -48,10 +51,16 @@ export class TaskResolver {
   }
 
   @ResolveField()
-  async assignUser(@Parent() task: Task): Promise<User> {
+  async assignUser(@Parent() task: GQLTask): Promise<User> {
     // const { assignUser } = task;
     // console.log('assignUser', assignUser);
     // return this.userService.findOneById(assignUser.id);
     return task.assignUser;
+  }
+
+  @ResolveField()
+  async status(@Parent() task: GQLTask): Promise<GQLStatus> {
+    // Get Status infor from task
+    return task.status;
   }
 }
