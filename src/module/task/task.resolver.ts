@@ -46,12 +46,12 @@ export class TaskResolver {
     return this.taskService.findAll(taskArgs);
   }
 
-  @Mutation(() => GQLTask)
+  @Mutation(() => Int)
   async addTask(
     @Args('newTaskData') newTaskData: NewTaskInput,
-  ): Promise<GQLTask> {
-    const task = await this.taskService.create(newTaskData);
-    return task;
+  ): Promise<number> {
+    const taskId = await this.taskService.create(newTaskData);
+    return taskId;
   }
 
   @Mutation(() => Boolean)

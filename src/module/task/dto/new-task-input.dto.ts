@@ -1,4 +1,4 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsOptional, MaxLength } from 'class-validator';
 
 @InputType()
@@ -7,12 +7,16 @@ export class NewTaskInput {
   @MaxLength(200)
   title: string;
 
-  @Field({ nullable: true })
+  @Field({ nullable: true, defaultValue: '' })
   @IsOptional()
   @MaxLength(500)
-  description?: string;
+  description: string;
 
   @Field()
   @IsOptional()
-  assignUserId: string;
+  statusId: string;
+
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  assignUserId: number;
 }
