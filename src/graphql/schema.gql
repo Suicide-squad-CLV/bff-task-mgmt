@@ -38,7 +38,7 @@ type LoginResponse {
 }
 
 type Mutation {
-  addTask(newTaskData: NewTaskInput!): GQLTask!
+  addTask(newTaskData: NewTaskInput!): Int!
   forgotPassword(emailInput: ForgotPasswordInput!): SuccessReponse
   login(loginInput: LoginInput!): LoginResponse!
   register(registerInput: RegisterInput!): RegisterResponse!
@@ -48,8 +48,9 @@ type Mutation {
 }
 
 input NewTaskInput {
-  assignUserId: String!
-  description: String
+  assignUserId: Int
+  description: String = ""
+  statusId: String!
   title: String!
 }
 
@@ -67,7 +68,7 @@ type Query {
     title: String
 
     """Assign user Id"""
-    userId: String
+    userId: Int
   ): [GQLTask!]!
 }
 

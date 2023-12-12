@@ -9,6 +9,7 @@ import {
   GRPCTask,
   GRPCTaskList,
   GRPCStatusList,
+  TaskId,
 } from 'src/grpc/interface/task';
 import { GQLTask } from './entity/task.entity';
 import { lastValueFrom, map } from 'rxjs';
@@ -80,10 +81,17 @@ export class TaskService implements OnModuleInit {
     );
   }
 
-  create(newTaskData: NewTaskInput): Promise<GQLTask> {
-    // TODO: Implement Create gRPC Service
-    console.log(newTaskData);
-    return null;
+  async create(newTaskData: NewTaskInput): Promise<number> {
+    return await lastValueFrom(
+      this.taskgRPCService.createTask(newTaskData).pipe(
+        map((task: TaskId) => {
+          if (task) {
+            return task.id;
+          }
+          return null;
+        }),
+      ),
+    );
   }
 
   remove(id: number): Promise<GQLTask> {
