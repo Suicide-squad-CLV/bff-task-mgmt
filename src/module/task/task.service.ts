@@ -26,13 +26,6 @@ export class TaskService implements OnModuleInit {
     );
   }
 
-  findOneById(id: number): Promise<GQLTask> {
-    // TODO: Convert Task interface from gRPC Service to GraphQL Task entity
-    // return this.taskgRPCService.findOne({ id: id });
-    console.log(id);
-    return null;
-  }
-
   async findAllStatus(): Promise<GQLStatus[]> {
     // lastValueFrom function converts Observable to Promise
     return await lastValueFrom(
@@ -71,6 +64,19 @@ export class TaskService implements OnModuleInit {
             return [];
           }),
         ),
+    );
+  }
+
+  async findOneById(id: number): Promise<GQLTask> {
+    return await lastValueFrom(
+      this.taskgRPCService.findOne({ id: id }).pipe(
+        map((task: GRPCTask) => {
+          if (task) {
+            return new GQLTask(task);
+          }
+          return null;
+        }),
+      ),
     );
   }
 
