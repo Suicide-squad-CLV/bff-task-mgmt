@@ -10,6 +10,7 @@ import {
   GRPCTaskList,
   GRPCStatusList,
   TaskId,
+  GRPCStatus,
 } from 'src/grpc/interface/task';
 import { GQLTask } from './entity/task.entity';
 import { lastValueFrom, map } from 'rxjs';
@@ -36,7 +37,7 @@ export class TaskService implements OnModuleInit {
           if (response.statusList) {
             // Convert GRPCStatusList in gRPC to GQLStatus[] in BFF
             return response.statusList.map(
-              (status: GQLStatus) => new GQLStatus(status),
+              (status: GRPCStatus) => new GQLStatus(status),
             );
           }
           return [];

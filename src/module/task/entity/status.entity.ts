@@ -9,9 +9,17 @@ export class GQLStatus {
   @Field()
   statusName: string;
 
+  @Field()
+  backgroundColor: string;
+
+  @Field()
+  textColor: string;
+
   constructor(status: GRPCStatus) {
     // Map GRPCStatus to GQLStatus
     this.id = status.id;
     this.statusName = status.statusName;
+    this.backgroundColor = status.backgroundHexColor;
+    this.textColor = status.textHexColor;
   }
 }

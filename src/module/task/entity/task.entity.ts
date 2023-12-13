@@ -32,6 +32,6 @@ export class GQLTask {
       createdAt: '',
       updatedAt: '',
     };
-    this.status = task.status;
+    this.status = new GQLStatus(task.status);
   }
 }

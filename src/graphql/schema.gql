@@ -14,8 +14,10 @@ input ForgotPasswordInput {
 }
 
 type GQLStatus {
+  backgroundColor: String!
   id: String!
   statusName: String!
+  textColor: String!
 }
 
 type GQLTask {
