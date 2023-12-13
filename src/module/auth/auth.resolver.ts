@@ -57,4 +57,13 @@ export class AuthResolver {
   ) {
     return this.authService.updatePassword(passwordInput);
   }
+
+  // @Mutation(() => String)
+  // async refreshToken(@Context() context: { req: Request; res: Response }) {
+  //   try {
+  //     return await this.authService.refreshToken(context.req, context.res);
+  //   } catch (error) {
+  //     throw new BadRequestException(error.message);
+  //   }
+  // }
 }

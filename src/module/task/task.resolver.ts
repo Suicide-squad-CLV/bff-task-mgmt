@@ -1,6 +1,6 @@
 import { GQLTask } from './entity/task.entity';
 import { GQLStatus } from './entity/status.entity';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UseGuards } from '@nestjs/common';
 import {
   Int,
   Query,
@@ -15,8 +15,10 @@ import { TaskArgs } from './dto/task-args.dto';
 import { TaskService } from './task.service';
 import { UserService } from 'src/module/user/user.service';
 import { User } from 'src/module/user/entity/user.entity';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Resolver(() => GQLTask)
+@UseGuards(JwtAuthGuard)
 export class TaskResolver {
   constructor(
     private readonly taskService: TaskService,

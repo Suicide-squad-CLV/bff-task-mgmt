@@ -131,3 +131,6 @@ dist
 
 .idea
 schema.gql
+
+# ignore upload folders
+uploads

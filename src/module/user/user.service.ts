@@ -31,4 +31,10 @@ export class UserService implements OnModuleInit {
   async remove(id: number) {
     return await firstValueFrom(this.usergRPCService.removeUser({ id: id }));
   }
+
+  async updateAvatar(id: number, avatar: string) {
+    return await firstValueFrom(
+      this.usergRPCService.updateAvatar({ id, avatar }),
+    );
+  }
 }
