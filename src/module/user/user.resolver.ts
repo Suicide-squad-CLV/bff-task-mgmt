@@ -12,6 +12,13 @@ import { UserService } from './user.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { SuccessReponse } from '../auth/types/normal-response.type';
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { v4 as uuidv4 } from 'uuid';
+import { join } from 'path';
+import { createWriteStream, existsSync, mkdirSync } from 'fs';
+import { Public } from 'src/common/decorators/public.decorator';
+import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
+import { UPLOAD_PATH } from 'src/common/utils/constants';
 
 @Resolver(() => User)
 @UseGuards(JwtAuthGuard)
@@ -36,30 +43,35 @@ export class UserResolver {
     return this.userService.remove(+id);
   }
 
-  // @Mutation(() => User)
-  // async updateUserPassword(
-  // @Args('password', { type: () => String, nullable: true }) password?: string,
-  // @Args('image', { type: () => GraphQLUpload, nullable: true })
-  // image?: GraphQLUpload,
-  // ) {
-  // let imageUrl;
-  // if (image) {
-  //   imageUrl = await this.storeImageAndGetURL(image);
-  // }
-  // return this.userService.updateProfile({ password, image: imageUrl });
-  // }
+  @Mutation(() => Boolean, { name: 'uploadAvatar' })
+  @Public()
+  async updateUserAvatar(
+    @Args('userId', { type: () => String }) userId: string,
+    @Args('avatar', { type: () => GraphQLUpload }, FileValidationPipe)
+    avatar: GraphQLUpload,
+  ) {
+    let imageUrl;
+    if (avatar) {
+      imageUrl = await this.storeImageAndGetURL(avatar);
+    }
+    return this.userService.updateAvatar(+userId, imageUrl);
+  }
 
-  // private async storeImageAndGetURL(file: GraphQLUpload): Promise<string> {
-  //   const { createReadStream, filename } = await file;
-  //   const fileData = await file;
-  //   console.log('fileData!', fileData);
-  //   const uniqueFilename = `${uuidv4()}_${filename}`;
-  //   const imagePath = join(process.cwd(), 'public', uniqueFilename);
-  //   const imageUrl = `${process.env.APP_URL}/${uniqueFilename}`;
-  //   const readStream = createReadStream();
-  //   readStream.pipe(createWriteStream(imagePath));
-  //   return imageUrl; // Return the appropriate URL where the file can be accessed
-  // }
+  private async storeImageAndGetURL(file: GraphQLUpload): Promise<string> {
+    const { createReadStream, filename } = await file;
+    const dirPath = join(process.cwd(), UPLOAD_PATH);
+
+    if (!existsSync(dirPath)) {
+      mkdirSync(dirPath, { recursive: true });
+    }
+
+    const uniqueFilename = `${uuidv4()}_${filename}`;
+    const imagePath = join(dirPath, uniqueFilename);
+    const readStream = createReadStream();
+    readStream.pipe(createWriteStream(imagePath));
+
+    return join(process.env.APP_URL, UPLOAD_PATH, uniqueFilename);
+  }
 
   @ResolveField()
   async tasks(@Parent() user: User) {

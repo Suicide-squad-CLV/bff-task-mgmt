@@ -45,6 +45,7 @@ type Mutation {
   removeTask(id: Int!): Boolean!
   removeUser(id: String!): SuccessReponse
   updatePassword(passwordInput: UpdatePasswordInput!): SuccessReponse
+  uploadAvatar(avatar: Upload!, userId: String!): Boolean!
 }
 
 input NewTaskInput {
@@ -99,6 +100,9 @@ input UpdatePasswordInput {
   password: String!
   token: String!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type User {
   avatar: String

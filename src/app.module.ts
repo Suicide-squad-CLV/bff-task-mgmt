@@ -43,6 +43,21 @@ import { AuthModule } from './module/auth/auth.module';
             })
           : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
       ],
+      formatError: (error) => {
+        const originalError = error.extensions?.originalError as any;
+
+        if (!originalError) {
+          return {
+            message: error.message,
+            code: error.extensions?.code,
+          };
+        }
+
+        return {
+          message: originalError.message,
+          code: error.extensions?.code,
+        };
+      },
     }),
     AuthModule,
     UserModule,
