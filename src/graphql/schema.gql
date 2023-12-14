@@ -59,7 +59,7 @@ input NewTaskInput {
 }
 
 type Query {
-  getAllUsers: [User!]!
+  getAllUsers(keyword: String!): [User!]!
   getUser(id: String!): User!
   profile: User!
   statusList: [GQLStatus!]!

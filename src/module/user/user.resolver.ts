@@ -33,8 +33,10 @@ export class UserResolver {
   }
 
   @Query(() => [User], { name: 'getAllUsers' })
-  async getUsers(): Promise<User[]> {
-    return await this.userService.findAll();
+  async getUsers(
+    @Args('keyword', { type: () => String }) keyword: string,
+  ): Promise<User[]> {
+    return await this.userService.findAll(keyword);
   }
 
   @Mutation(() => SuccessReponse, { nullable: true, name: 'removeUser' })
