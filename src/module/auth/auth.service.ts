@@ -1,11 +1,11 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
+import { ClientGrpc, RpcException } from '@nestjs/microservices';
 import {
   USER_GR_PC_SERVICE_NAME,
   User,
   UserGRPCServiceClient,
 } from 'src/grpc/interface/user';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, throwError } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import RegisterInput from './dto/register.dto';
@@ -89,7 +89,11 @@ export class AuthService implements OnModuleInit {
 
   async validateUser(email: string, password: string): Promise<any> {
     return await firstValueFrom(
-      this.usergRPCService.findByCredentials({ email, password }),
+      this.usergRPCService.findByCredentials({ email, password }).pipe(
+        catchError((error) => {
+          return throwError(() => new RpcException(error));
+        }),
+      ),
     );
   }
 

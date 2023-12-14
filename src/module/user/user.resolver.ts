@@ -16,7 +16,6 @@ import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { v4 as uuidv4 } from 'uuid';
 import { join } from 'path';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
-import { Public } from 'src/common/decorators/public.decorator';
 import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
 import { UPLOAD_PATH } from 'src/common/utils/constants';
 
@@ -44,7 +43,6 @@ export class UserResolver {
   }
 
   @Mutation(() => User, { name: 'uploadAvatar' })
-  @Public()
   async updateUserAvatar(
     @Args('userId', { type: () => String }) userId: string,
     @Args('avatar', { type: () => GraphQLUpload }, FileValidationPipe)
