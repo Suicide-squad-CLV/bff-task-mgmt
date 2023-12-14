@@ -23,8 +23,10 @@ export class UserService implements OnModuleInit {
     return await firstValueFrom(this.usergRPCService.findOne({ id }));
   }
 
-  async findAll() {
-    const { users } = await firstValueFrom(this.usergRPCService.findMany({}));
+  async findAll(keyword: string) {
+    const { users } = await firstValueFrom(
+      this.usergRPCService.findMany({ email: keyword }),
+    );
     return users;
   }
 
