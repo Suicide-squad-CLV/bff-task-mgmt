@@ -11,6 +11,7 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { NewTaskInput } from './dto/new-task-input.dto';
+import { UpdateTaskInput } from './dto/update-task-input.dto';
 import { TaskArgs } from './dto/task-args.dto';
 import { TaskService } from './task.service';
 import { UserService } from 'src/module/user/user.service';
@@ -53,6 +54,15 @@ export class TaskResolver {
     @Args('newTaskData') newTaskData: NewTaskInput,
   ): Promise<number> {
     const taskId = await this.taskService.create(newTaskData);
+    return taskId;
+  }
+
+  @Mutation(() => Int)
+  async updateTask(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('updatedTaskData') updatedTaskData: UpdateTaskInput,
+  ): Promise<number> {
+    const taskId = await this.taskService.update(id, updatedTaskData);
     return taskId;
   }
 
