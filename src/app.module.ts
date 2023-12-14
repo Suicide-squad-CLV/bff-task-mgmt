@@ -43,19 +43,22 @@ import { AuthModule } from './module/auth/auth.module';
             })
           : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
       ],
-      formatError: (error) => {
-        const originalError = error.extensions?.originalError as GraphQLError;
-
+      formatError: (error: any) => {
+        const originalError = error.extensions.originalError as GraphQLError;
         if (!originalError) {
           return {
             message: error.message,
+            errors: error.extensions?.message,
             code: error.extensions?.code,
+            statusCode: error.extensions?.statusCode,
+            error: error.extensions?.error,
           };
         }
 
         return {
           message: originalError.message,
           code: error.extensions?.code,
+          statusCode: error.extensions?.originalError?.statusCode ?? 500,
         };
       },
     }),

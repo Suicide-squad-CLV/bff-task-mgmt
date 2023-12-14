@@ -47,7 +47,7 @@ type Mutation {
   removeTask(id: Int!): Boolean!
   removeUser(id: String!): SuccessReponse
   updatePassword(passwordInput: UpdatePasswordInput!): SuccessReponse
-  uploadAvatar(avatar: Upload!, userId: String!): Boolean!
+  uploadAvatar(avatar: Upload!, userId: String!): User!
 }
 
 input NewTaskInput {

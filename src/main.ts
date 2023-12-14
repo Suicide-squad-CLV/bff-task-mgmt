@@ -5,10 +5,12 @@ import { ValidationPipe } from '@nestjs/common';
 import * as graphqlUploadExpress from 'graphql-upload/graphqlUploadExpress.js';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { RpcExceptionFilter } from './common/exceptions/grpc.exception';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
+  app.useGlobalFilters(new RpcExceptionFilter());
 
   app.enableCors({
     origin: configService.get<string>('APP_FRONTEND_URL'),
