@@ -15,6 +15,7 @@ import {
 import { GQLTask } from './entity/task.entity';
 import { lastValueFrom, map } from 'rxjs';
 import { GQLStatus } from './entity/status.entity';
+import { UpdateTaskInput } from './dto/update-task-input.dto';
 
 @Injectable()
 export class TaskService implements OnModuleInit {
@@ -85,6 +86,20 @@ export class TaskService implements OnModuleInit {
   async create(newTaskData: NewTaskInput): Promise<number> {
     return await lastValueFrom(
       this.taskgRPCService.createTask(newTaskData).pipe(
+        map((task: TaskId) => {
+          if (task) {
+            return task.id;
+          }
+          return null;
+        }),
+      ),
+    );
+  }
+
+  async update(id: number, updatedTaskData: UpdateTaskInput): Promise<number> {
+    console.log({ ...updatedTaskData, taskId: id });
+    return await lastValueFrom(
+      this.taskgRPCService.updateTask({ ...updatedTaskData, taskId: id }).pipe(
         map((task: TaskId) => {
           if (task) {
             return task.id;
