@@ -4,6 +4,7 @@ import { IsOptional, MaxLength } from 'class-validator';
 @InputType()
 export class UpdateTaskInput {
   @Field({ nullable: true })
+  @IsOptional()
   @MaxLength(200)
   title: string;
 
