@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { DirectiveLocation, GraphQLDirective } from 'graphql';
+import { DirectiveLocation, GraphQLDirective, GraphQLError } from 'graphql';
 import {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault,
@@ -44,7 +44,7 @@ import { AuthModule } from './module/auth/auth.module';
           : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
       ],
       formatError: (error) => {
-        const originalError = error.extensions?.originalError as any;
+        const originalError = error.extensions?.originalError as GraphQLError;
 
         if (!originalError) {
           return {

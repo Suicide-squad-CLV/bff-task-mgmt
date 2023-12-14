@@ -43,7 +43,7 @@ export class UserResolver {
     return this.userService.remove(+id);
   }
 
-  @Mutation(() => Boolean, { name: 'uploadAvatar' })
+  @Mutation(() => User, { name: 'uploadAvatar' })
   @Public()
   async updateUserAvatar(
     @Args('userId', { type: () => String }) userId: string,
@@ -70,7 +70,7 @@ export class UserResolver {
     const readStream = createReadStream();
     readStream.pipe(createWriteStream(imagePath));
 
-    return join(process.env.APP_URL, UPLOAD_PATH, uniqueFilename);
+    return [process.env.APP_URL, UPLOAD_PATH, uniqueFilename].join('/');
   }
 
   @ResolveField()
