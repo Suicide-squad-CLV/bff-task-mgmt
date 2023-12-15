@@ -32,7 +32,7 @@ export class UserResolver {
     return await this.userService.findOneById(+id);
   }
 
-  @Query(() => [User], { name: 'getAllUsers' })
+  @Query(() => [User], { name: 'getAllUsers', nullable: true })
   async getUsers(
     @Args('keyword', { type: () => String }) keyword: string,
   ): Promise<User[]> {
