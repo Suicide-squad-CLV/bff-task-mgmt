@@ -20,4 +20,8 @@ export class UpdateTaskInput {
   @Field(() => Int, { nullable: true })
   @IsOptional()
   assignUserId: number;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  deleteFlag: string;
 }
