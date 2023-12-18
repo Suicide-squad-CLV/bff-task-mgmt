@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { GRPCTask } from 'src/grpc/interface/task';
-import { User } from 'src/module/user/entity/user.entity';
 import { GQLStatus } from './status.entity';
+import { Assignee } from 'src/module/user/entity/assignee.entity';
 
 @ObjectType()
 export class GQLTask {
@@ -14,8 +14,8 @@ export class GQLTask {
   @Field({ nullable: true })
   taskDescription?: string;
 
-  @Field(() => User, { nullable: true })
-  assignUser?: User;
+  @Field(() => Assignee, { nullable: true })
+  assignUser?: Assignee;
 
   @Field(() => GQLStatus, { nullable: true })
   status?: GQLStatus;
