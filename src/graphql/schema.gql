@@ -4,6 +4,20 @@
 
 directive @upper on FIELD_DEFINITION
 
+type Assignee {
+  avatar: String
+  createdAt: String
+  email: String
+  fullname: String
+  hasChangePassword: Boolean
+  id: ID
+  isDeleted: Boolean
+  password: String
+  refreshToken: String
+  tasks: [GQLTask!]!
+  updatedAt: String
+}
+
 type ErrorType {
   code: String
   message: String!
@@ -21,7 +35,7 @@ type GQLStatus {
 }
 
 type GQLTask {
-  assignUser: User
+  assignUser: Assignee
   id: Int!
   status: GQLStatus
   taskDescription: String
@@ -107,6 +121,7 @@ input UpdatePasswordInput {
 
 input UpdateTaskInput {
   assignUserId: Int
+  deleteFlag: String
   description: String
   statusId: String
   title: String

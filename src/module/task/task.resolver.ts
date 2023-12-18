@@ -15,8 +15,8 @@ import { UpdateTaskInput } from './dto/update-task-input.dto';
 import { TaskArgs } from './dto/task-args.dto';
 import { TaskService } from './task.service';
 import { UserService } from 'src/module/user/user.service';
-import { User } from 'src/module/user/entity/user.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Assignee } from '../user/entity/assignee.entity';
 
 @Resolver(() => GQLTask)
 @UseGuards(JwtAuthGuard)
@@ -72,7 +72,7 @@ export class TaskResolver {
   }
 
   @ResolveField()
-  async assignUser(@Parent() task: GQLTask): Promise<User> {
+  async assignUser(@Parent() task: GQLTask): Promise<Assignee> {
     // const { assignUser } = task;
     // console.log('assignUser', assignUser);
     // return this.userService.findOneById(assignUser.id);
