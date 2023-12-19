@@ -37,7 +37,7 @@ export class AuthService implements OnModuleInit {
 
     const accessToken = await this.jwtService.signAsync(jwtPayload, {
       secret: this.configService.get<string>('JWT_SECRET'),
-      expiresIn: '15m',
+      expiresIn: this.configService.get<number>('TOKEN_EXPIRED'),
     });
 
     return {
@@ -49,7 +49,11 @@ export class AuthService implements OnModuleInit {
 
   async register(registerDto: RegisterInput) {
     const newUser = await firstValueFrom(
-      this.usergRPCService.create(registerDto),
+      this.usergRPCService.create(registerDto).pipe(
+        catchError((error) => {
+          return throwError(() => new RpcException(error));
+        }),
+      ),
     );
 
     return {
@@ -67,14 +71,24 @@ export class AuthService implements OnModuleInit {
 
   async profile(user: User): Promise<User> {
     const profileUser = await firstValueFrom(
-      this.usergRPCService.findOne({ id: user.id }),
+      this.usergRPCService.findOne({ id: user.id }).pipe(
+        catchError((error) => {
+          return throwError(() => new RpcException(error));
+        }),
+      ),
     );
     profileUser.password = undefined;
     return profileUser;
   }
 
   async forgotPassword(emailInput: ForgotPasswordInput) {
-    await firstValueFrom(this.usergRPCService.forgotPassword(emailInput));
+    await firstValueFrom(
+      this.usergRPCService.forgotPassword(emailInput).pipe(
+        catchError((error) => {
+          return throwError(() => new RpcException(error));
+        }),
+      ),
+    );
     return {
       success: true,
       message: 'Forgot password email already sent',
@@ -83,7 +97,11 @@ export class AuthService implements OnModuleInit {
 
   async updatePassword(passwordInput: UpdatePasswordInput) {
     return await firstValueFrom(
-      this.usergRPCService.updatePassword(passwordInput),
+      this.usergRPCService.updatePassword(passwordInput).pipe(
+        catchError((error) => {
+          return throwError(() => new RpcException(error));
+        }),
+      ),
     );
   }
 

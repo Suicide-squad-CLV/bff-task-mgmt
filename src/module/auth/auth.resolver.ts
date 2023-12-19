@@ -22,16 +22,7 @@ export class AuthResolver {
   async register(
     @Args('registerInput') registerDto: RegisterInput,
   ): Promise<RegisterResponse> {
-    try {
-      return await this.authService.register(registerDto);
-    } catch (error) {
-      return {
-        error: {
-          message: error.message,
-          code: 'SOME_ERROR_CODE',
-        },
-      };
-    }
+    return await this.authService.register(registerDto);
   }
 
   @Mutation(() => LoginResponse, { name: 'login' })

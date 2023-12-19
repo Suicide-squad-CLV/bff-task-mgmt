@@ -1,6 +1,6 @@
 import { Inject, OnModuleInit, Injectable } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
+import { ClientGrpc, RpcException } from '@nestjs/microservices';
+import { catchError, firstValueFrom, throwError } from 'rxjs';
 import {
   USER_GR_PC_SERVICE_NAME,
   USER_PACKAGE_NAME,
@@ -20,23 +20,43 @@ export class UserService implements OnModuleInit {
   }
 
   async findOneById(id: number) {
-    return await firstValueFrom(this.usergRPCService.findOne({ id }));
+    return await firstValueFrom(
+      this.usergRPCService.findOne({ id }).pipe(
+        catchError((error) => {
+          return throwError(() => new RpcException(error));
+        }),
+      ),
+    );
   }
 
   async findAll(keyword: string) {
     const { users } = await firstValueFrom(
-      this.usergRPCService.findMany({ email: keyword }),
+      this.usergRPCService.findMany({ email: keyword }).pipe(
+        catchError((error) => {
+          return throwError(() => new RpcException(error));
+        }),
+      ),
     );
     return users;
   }
 
   async remove(id: number) {
-    return await firstValueFrom(this.usergRPCService.removeUser({ id: id }));
+    return await firstValueFrom(
+      this.usergRPCService.removeUser({ id: id }).pipe(
+        catchError((error) => {
+          return throwError(() => new RpcException(error));
+        }),
+      ),
+    );
   }
 
   async updateAvatar(id: number, avatar: string) {
     return await firstValueFrom(
-      this.usergRPCService.updateAvatar({ id, avatar }),
+      this.usergRPCService.updateAvatar({ id, avatar }).pipe(
+        catchError((error) => {
+          return throwError(() => new RpcException(error));
+        }),
+      ),
     );
   }
 }

@@ -7,7 +7,6 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import { TaskService } from 'src/module/task/task.service';
 import { UserService } from './user.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -22,10 +21,7 @@ import { UPLOAD_PATH } from 'src/common/utils/constants';
 @Resolver(() => User)
 @UseGuards(JwtAuthGuard)
 export class UserResolver {
-  constructor(
-    private readonly taskService: TaskService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Query(() => User, { name: 'getUser' })
   async getDetailUser(@Args('id') id: string): Promise<User> {
@@ -76,7 +72,5 @@ export class UserResolver {
   @ResolveField()
   async tasks(@Parent() user: User) {
     return user.tasks;
-    // const { id } = user;
-    // return this.taskService.findAll({ assignUserId: id.toString() });
   }
 }
