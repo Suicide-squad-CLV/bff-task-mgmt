@@ -35,14 +35,17 @@ export class AuthService implements OnModuleInit {
       email: email,
     };
 
+    const expiresIn = this.configService.get<number>('TOKEN_EXPIRED');
+    const expiration = Math.floor(Date.now() / 1000) + Number(expiresIn);
+
     const accessToken = await this.jwtService.signAsync(jwtPayload, {
-      secret: this.configService.get<string>('JWT_SECRET'),
-      expiresIn: this.configService.get<number>('TOKEN_EXPIRED'),
+      secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
+      expiresIn: expiration,
     });
 
     return {
       token: accessToken,
-      expiration: this.configService.get<number>('TOKEN_EXPIRED'),
+      expiration: expiration,
       type: 'Bearer',
     };
   }
