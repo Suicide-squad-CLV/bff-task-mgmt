@@ -122,7 +122,7 @@ input UpdatePasswordInput {
 
 input UpdateTaskInput {
   assignUserId: Int
-  deleteFlag: String
+  deleteFlag: Boolean
   description: String
   statusId: String
   title: String
