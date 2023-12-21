@@ -30,6 +30,7 @@ input ForgotPasswordInput {
 type GQLStatus {
   backgroundColor: String!
   id: String!
+  persisted: Boolean!
   statusName: String!
   textColor: String!
 }

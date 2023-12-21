@@ -1,7 +1,6 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
-import { GraphQLErrorFilter } from 'src/common/filters/custom-exception.filter';
-import { UseFilters, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { RegisterResponse } from './types/register-response.type';
 import { LoginResponse } from './types/login-response.type';
 import RegisterInput from './dto/register.dto';
@@ -17,7 +16,7 @@ import UpdatePasswordInput from './dto/updatePassword.dto';
 export class AuthResolver {
   constructor(private readonly authService: AuthService) {}
 
-  @UseFilters(GraphQLErrorFilter)
+  // @UseFilters(GraphQLErrorFilter)
   @Mutation(() => RegisterResponse, { name: 'register' })
   async register(
     @Args('registerInput') registerDto: RegisterInput,

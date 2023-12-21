@@ -15,11 +15,15 @@ export class GQLStatus {
   @Field()
   textColor: string;
 
+  @Field()
+  persisted: boolean;
+
   constructor(status: GRPCStatus) {
     // Map GRPCStatus to GQLStatus
     this.id = status.id;
     this.statusName = status.statusName;
     this.backgroundColor = status.backgroundHexColor;
     this.textColor = status.textHexColor;
+    this.persisted = status.persisted ?? false;
   }
 }

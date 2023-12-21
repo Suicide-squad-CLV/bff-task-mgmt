@@ -12,6 +12,9 @@ import { TaskModule } from './module/task/task.module';
 import { UserModule } from './module/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './module/auth/auth.module';
+import { ExceptionFilter } from './common/filters/custom-exception.filter';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 @Module({
   imports: [
@@ -65,6 +68,16 @@ import { AuthModule } from './module/auth/auth.module';
     AuthModule,
     UserModule,
     TaskModule,
+  ],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: ExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
   ],
 })
 export class AppModule {}
