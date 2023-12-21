@@ -23,5 +23,5 @@ export class UpdateTaskInput {
 
   @Field({ nullable: true })
   @IsOptional()
-  deleteFlag: string;
+  deleteFlag: boolean;
 }
