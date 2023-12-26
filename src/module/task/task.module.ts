@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TaskResolver } from './task.resolver';
 import { TaskService } from './task.service';
-import { UserService } from 'src/module/user/user.service';
+import { UserService } from '../../module/user/user.service';
 import { ClientsModule } from '@nestjs/microservices';
-import { TASK_PACKAGE_NAME } from 'src/grpc/interface/task';
-import { USER_PACKAGE_NAME } from 'src/grpc/interface/user';
+import { TASK_PACKAGE_NAME } from '../../grpc/interface/task';
+import { USER_PACKAGE_NAME } from '../../grpc/interface/user';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import getGrpcOptions from 'src/grpc/grpc-client.options';
+import getGrpcOptions from '../../grpc/grpc-client.options';
 
 @Module({
   imports: [

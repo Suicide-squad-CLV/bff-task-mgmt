@@ -87,7 +87,25 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "src/grpc",
+      "src/coverage",
+      "src/common",
+      "src/main",
+      "src/app.module.ts",
+      "src/graphql",
+      "src/module/auth.module.ts",
+      "src/module/task.module.ts",
+      "src/module/user.module.ts",
+      "src/module/auth/strategy",
+      "src/module/auth/guards"
+    ],
+    "coverageDirectory": "coverage",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    },
+    "coverageProvider": "v8"
   }
 }

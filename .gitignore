@@ -45,5 +45,8 @@ dist
 schema.gql
 package-lock.json
 yarn.lock
+
 # ignore upload folders
 uploads
+src/coverage
+.vscode

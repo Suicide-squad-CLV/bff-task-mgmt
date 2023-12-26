@@ -5,7 +5,7 @@ import {
   USER_GR_PC_SERVICE_NAME,
   USER_PACKAGE_NAME,
   UserGRPCServiceClient,
-} from 'src/grpc/interface/user';
+} from '../../grpc/interface/user';
 
 @Injectable()
 export class UserService implements OnModuleInit {

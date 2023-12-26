@@ -1,5 +1,5 @@
 import { Field, ObjectType, ID } from '@nestjs/graphql';
-import { GQLTask } from 'src/module/task/entity/task.entity';
+import { GQLTask } from '../../task/entity/task.entity';
 
 @ObjectType()
 export class User {

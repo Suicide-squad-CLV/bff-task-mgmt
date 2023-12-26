@@ -1,4 +1,4 @@
-import { User } from 'src/module/user/entity/user.entity';
+import { User } from '../user/entity/user.entity';
 import {
   Query,
   Args,
@@ -15,8 +15,8 @@ import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { v4 as uuidv4 } from 'uuid';
 import { join } from 'path';
 import { createWriteStream, existsSync, mkdirSync } from 'fs';
-import { FileValidationPipe } from 'src/common/pipes/file-validation.pipe';
-import { UPLOAD_PATH } from 'src/common/utils/constants';
+import { FileValidationPipe } from '../../common/pipes/file-validation.pipe';
+import { UPLOAD_PATH } from '../../common/utils/constants';
 
 @Resolver(() => User)
 @UseGuards(JwtAuthGuard)

@@ -7,8 +7,8 @@ import { ClientsModule } from '@nestjs/microservices';
 import {
   USER_GR_PC_SERVICE_NAME,
   USER_PACKAGE_NAME,
-} from 'src/grpc/interface/user';
-import getGrpcOptions from 'src/grpc/grpc-client.options';
+} from '../../grpc/interface/user';
+import getGrpcOptions from '../../grpc/grpc-client.options';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategy/jwt.strategy';

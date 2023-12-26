@@ -14,7 +14,7 @@ import { NewTaskInput } from './dto/new-task-input.dto';
 import { UpdateTaskInput } from './dto/update-task-input.dto';
 import { TaskArgs } from './dto/task-args.dto';
 import { TaskService } from './task.service';
-import { UserService } from 'src/module/user/user.service';
+import { UserService } from './../user/user.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Assignee } from '../user/entity/assignee.entity';
 

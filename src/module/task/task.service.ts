@@ -11,7 +11,7 @@ import {
   GRPCStatusList,
   TaskId,
   GRPCStatus,
-} from 'src/grpc/interface/task';
+} from '../../grpc/interface/task';
 import { GQLTask } from './entity/task.entity';
 import { lastValueFrom, map } from 'rxjs';
 import { GQLStatus } from './entity/status.entity';

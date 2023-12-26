@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { GRPCTask } from 'src/grpc/interface/task';
 import { GQLStatus } from './status.entity';
-import { Assignee } from 'src/module/user/entity/assignee.entity';
+import { Assignee } from '../../user/entity/assignee.entity';
 
 @ObjectType()
 export class GQLTask {

@@ -4,7 +4,7 @@ import {
   USER_GR_PC_SERVICE_NAME,
   User,
   UserGRPCServiceClient,
-} from 'src/grpc/interface/user';
+} from '../../grpc/interface/user';
 import { catchError, firstValueFrom, throwError } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';

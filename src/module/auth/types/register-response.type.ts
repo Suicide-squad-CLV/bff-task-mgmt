@@ -1,6 +1,6 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { ErrorType } from './error.type';
-import { User } from 'src/module/user/entity/user.entity';
+import { User } from '../../user/entity/user.entity';
 import { Token } from './token.type';
 
 @ObjectType()
