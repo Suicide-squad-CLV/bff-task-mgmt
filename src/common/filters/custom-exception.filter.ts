@@ -1,52 +1,83 @@
 import {
-  ExceptionFilter as NestExceptionFilter,
+  ExceptionFilter,
   Catch,
-  ArgumentsHost,
   Logger,
   HttpStatus,
+  HttpException,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { RpcException } from '@nestjs/microservices';
+import { Metadata, status } from '@grpc/grpc-js';
+import { ErrorStatusMapper } from '../utils/errorStatus.mapper';
+import { GraphQLError } from 'graphql';
+
+interface CustomException<T> {
+  code: status;
+  details: T;
+  metadata: Metadata;
+}
+
+interface HttpCustomException {
+  message: string;
+  statusCode: number;
+  error: string;
+}
 
 @Catch()
-export class ExceptionFilter implements NestExceptionFilter {
-  private readonly logger = new Logger(ExceptionFilter.name);
+export class CustomExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(CustomExceptionFilter.name);
 
-  catch(exception: any, host: ArgumentsHost) {
-    if (host.getType() === 'http') {
-      return this.catchHttp(exception, host);
+  catch(exception: any) {
+    // if (process.env.NODE_ENV !== 'production') {
+    this.logger.error(exception);
+    // }
+
+    // if (host.getType<GqlContextType>() === 'graphql') {
+    if (exception instanceof HttpException) {
+      return this.catchHttp(exception);
     }
+
+    return this.catchGraphql(exception);
   }
 
-  private catchHttp(exception: any, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
-
-    if (!(exception instanceof Error)) {
-      exception = new Error(exception);
+  private catchGraphql(exception: any) {
+    if (!(exception instanceof RpcException)) {
+      exception = new RpcException(exception);
     }
 
-    const status = exception.getStatus
-      ? exception.getStatus()
-      : HttpStatus.INTERNAL_SERVER_ERROR;
+    const err = exception.getError();
+    let _exception: CustomException<string>;
 
-    const message = exception.getResponse
-      ? exception.getResponse()
-      : exception.message;
+    if (typeof err === 'object') {
+      _exception = err as CustomException<string>;
+    }
 
-    this.logger.error(exception, {
-      name: exception.name,
-      message,
-      status,
-      path: request.url,
-      stack: exception.stack,
+    const mapper = new ErrorStatusMapper();
+    const status = mapper.grpcToHttpMapper(_exception.code);
+    const type = HttpStatus[status];
+
+    throw new GraphQLError(_exception.details, {
+      extensions: {
+        message: err,
+        statusCode: status,
+        error: type,
+      },
     });
+  }
 
-    response.status(status).json({
-      statusCode: status,
-      message,
-      timestamp: new Date().toISOString(),
-      path: request.url,
+  private catchHttp(exception: HttpException) {
+    const _error = exception.getResponse();
+
+    let _exception: HttpCustomException;
+    if (typeof _error === 'object') {
+      _exception = _error as HttpCustomException;
+    }
+
+    throw new GraphQLError(_exception.message, {
+      extensions: {
+        message: _exception.message,
+        statusCode: _exception.statusCode,
+        error: _exception.error ?? _exception.message,
+      },
     });
   }
 }

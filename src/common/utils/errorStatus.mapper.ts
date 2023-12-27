@@ -16,6 +16,10 @@ export class ErrorStatusMapper {
         httpStatusEquivalent = HttpStatus.METHOD_NOT_ALLOWED;
         break;
 
+      case Status.UNKNOWN:
+        httpStatusEquivalent = HttpStatus.BAD_GATEWAY;
+        break;
+
       case Status.INVALID_ARGUMENT:
         httpStatusEquivalent = HttpStatus.UNPROCESSABLE_ENTITY;
         break;
@@ -56,8 +60,16 @@ export class ErrorStatusMapper {
         httpStatusEquivalent = HttpStatus.NOT_IMPLEMENTED;
         break;
 
+      case Status.INTERNAL:
+        httpStatusEquivalent = HttpStatus.INTERNAL_SERVER_ERROR;
+        break;
+
       case Status.UNAVAILABLE:
         httpStatusEquivalent = HttpStatus.NOT_FOUND;
+        break;
+
+      case Status.DATA_LOSS:
+        httpStatusEquivalent = HttpStatus.INTERNAL_SERVER_ERROR;
         break;
 
       case Status.UNAUTHENTICATED:

@@ -95,9 +95,9 @@
       "src/main",
       "src/app.module.ts",
       "src/graphql",
-      "src/module/auth.module.ts",
-      "src/module/task.module.ts",
-      "src/module/user.module.ts",
+      "src/module/auth/auth.module.ts",
+      "src/module/task/task.module.ts",
+      "src/module/user/user.module.ts",
       "src/module/auth/strategy",
       "src/module/auth/guards"
     ],
@@ -105,7 +105,6 @@
     "testEnvironment": "node",
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/$1"
-    },
-    "coverageProvider": "v8"
+    }
   }
 }

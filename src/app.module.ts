@@ -12,7 +12,7 @@ import { TaskModule } from './module/task/task.module';
 import { UserModule } from './module/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './module/auth/auth.module';
-import { ExceptionFilter } from './common/filters/custom-exception.filter';
+import { CustomExceptionFilter } from './common/filters/custom-exception.filter';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
@@ -52,7 +52,6 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
           return {
             message: error.message,
             errors: error.extensions?.message,
-            code: error.extensions?.code,
             statusCode: error.extensions?.statusCode,
             error: error.extensions?.error,
           };
@@ -60,8 +59,9 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
         return {
           message: originalError.message,
-          code: error.extensions?.code,
-          statusCode: error.extensions?.originalError?.statusCode ?? 500,
+          errors: originalError.stack,
+          statusCode: error.extensions?.originalError?.statusCode,
+          error: error.extensions?.error,
         };
       },
     }),
@@ -72,7 +72,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
   providers: [
     {
       provide: APP_FILTER,
-      useClass: ExceptionFilter,
+      useClass: CustomExceptionFilter,
     },
     {
       provide: APP_INTERCEPTOR,

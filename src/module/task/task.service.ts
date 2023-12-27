@@ -1,5 +1,5 @@
 import { Inject, OnModuleInit, Injectable } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
+import { ClientGrpc, RpcException } from '@nestjs/microservices';
 import { TaskArgs } from './dto/task-args.dto';
 import { NewTaskInput } from './dto/new-task-input.dto';
 import {
@@ -13,7 +13,7 @@ import {
   GRPCStatus,
 } from '../../grpc/interface/task';
 import { GQLTask } from './entity/task.entity';
-import { lastValueFrom, map } from 'rxjs';
+import { catchError, lastValueFrom, map } from 'rxjs';
 import { GQLStatus } from './entity/status.entity';
 import { UpdateTaskInput } from './dto/update-task-input.dto';
 
@@ -42,6 +42,9 @@ export class TaskService implements OnModuleInit {
             );
           }
           return [];
+        }),
+        catchError((err) => {
+          throw new RpcException(err);
         }),
       ),
     );
@@ -79,6 +82,9 @@ export class TaskService implements OnModuleInit {
           }
           return null;
         }),
+        // catchError((err) => {
+        //   throw new RpcException(err);
+        // }),
       ),
     );
   }

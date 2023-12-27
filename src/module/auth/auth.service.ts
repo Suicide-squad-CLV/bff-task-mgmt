@@ -1,11 +1,11 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { ClientGrpc, RpcException } from '@nestjs/microservices';
+import { ClientGrpc } from '@nestjs/microservices';
 import {
   USER_GR_PC_SERVICE_NAME,
   User,
   UserGRPCServiceClient,
 } from '../../grpc/interface/user';
-import { catchError, firstValueFrom, throwError } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import RegisterInput from './dto/register.dto';
@@ -52,11 +52,7 @@ export class AuthService implements OnModuleInit {
 
   async register(registerDto: RegisterInput) {
     const newUser = await firstValueFrom(
-      this.usergRPCService.create(registerDto).pipe(
-        catchError((error) => {
-          return throwError(() => new RpcException(error));
-        }),
-      ),
+      this.usergRPCService.create(registerDto),
     );
 
     return {
@@ -74,24 +70,14 @@ export class AuthService implements OnModuleInit {
 
   async profile(user: User): Promise<User> {
     const profileUser = await firstValueFrom(
-      this.usergRPCService.findOne({ id: user.id }).pipe(
-        catchError((error) => {
-          return throwError(() => new RpcException(error));
-        }),
-      ),
+      this.usergRPCService.findOne({ id: user.id }),
     );
     profileUser.password = undefined;
     return profileUser;
   }
 
   async forgotPassword(emailInput: ForgotPasswordInput) {
-    await firstValueFrom(
-      this.usergRPCService.forgotPassword(emailInput).pipe(
-        catchError((error) => {
-          return throwError(() => new RpcException(error));
-        }),
-      ),
-    );
+    await firstValueFrom(this.usergRPCService.forgotPassword(emailInput));
     return {
       success: true,
       message: 'Forgot password email already sent',
@@ -100,21 +86,13 @@ export class AuthService implements OnModuleInit {
 
   async updatePassword(passwordInput: UpdatePasswordInput) {
     return await firstValueFrom(
-      this.usergRPCService.updatePassword(passwordInput).pipe(
-        catchError((error) => {
-          return throwError(() => new RpcException(error));
-        }),
-      ),
+      this.usergRPCService.updatePassword(passwordInput),
     );
   }
 
   async validateUser(email: string, password: string): Promise<any> {
     return await firstValueFrom(
-      this.usergRPCService.findByCredentials({ email, password }).pipe(
-        catchError((error) => {
-          return throwError(() => new RpcException(error));
-        }),
-      ),
+      this.usergRPCService.findByCredentials({ email, password }),
     );
   }
 

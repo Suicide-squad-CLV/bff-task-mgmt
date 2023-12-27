@@ -3,6 +3,11 @@ import { UserResolver } from '../user.resolver';
 import { UserService } from '../user.service';
 import { Response, User } from 'src/grpc/interface/user';
 import { mockReturnUser } from '../stubs/user.stub';
+import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { GQLTask } from 'src/module/task/entity/task.entity';
+import * as fs from 'fs';
+
+jest.mock('fs');
 
 describe('UserResolver', () => {
   let resolver: UserResolver;
@@ -73,6 +78,90 @@ describe('UserResolver', () => {
 
       expect(result).toBe(expectedData);
       expect(service.remove).toHaveBeenCalledWith(+id);
+    });
+  });
+
+  describe('updateUserAvatar', () => {
+    it('should update user avatar successfully', async () => {
+      const userId = '1';
+      const file: GraphQLUpload = {
+        createReadStream: jest.fn(),
+        encoding: 'utf-8',
+        filename: 'avatar.jpg',
+        mimetype: 'image/jpeg',
+        fieldName: 'test-file',
+      };
+      const pathFile = 'http://localhost:5001/uploads/test-file.jpg';
+
+      jest
+        .spyOn(resolver as any, 'storeImageAndGetURL')
+        .mockResolvedValue(pathFile);
+
+      (
+        jest.spyOn(resolver as any, 'storeImageAndGetURL') as jest.Mock
+      ).mockResolvedValue(pathFile);
+
+      jest
+        .spyOn(service, 'updateAvatar')
+        .mockResolvedValue({ ...mockReturnUser, avatar: pathFile });
+
+      const result = await resolver.updateUserAvatar(userId, file);
+
+      expect(result).toEqual({ ...mockReturnUser, avatar: pathFile });
+
+      const storeImageAndGetURL = (resolver as any).storeImageAndGetURL;
+      expect(storeImageAndGetURL).toHaveBeenCalled();
+      expect(service.updateAvatar).toHaveBeenCalledWith(+userId, pathFile);
+    });
+  });
+
+  describe.skip('storeImageAndGetURL', () => {
+    it('should upload image and return URL', async () => {
+      // Arrange
+      const mockFile: GraphQLUpload = {
+        createReadStream: jest.fn(),
+        filename: 'test.jpg',
+        mimetype: 'image/jpeg',
+        fieldName: 'test-file',
+      };
+
+      // Mock file system functions
+      jest.spyOn(fs, 'existsSync').mockReturnValue(false);
+      jest.spyOn(fs, 'mkdirSync').mockImplementation();
+      //jest.spyOn(fs, 'createWriteStream').mockReturnValue(jest.fn());
+
+      const mockedUuid = 'mocked-uuid';
+      jest.spyOn(global.uuidv4, 'v4').mockReturnValue(mockedUuid);
+
+      const mockId = '1';
+      const mockAppUrl = 'http://example.com';
+
+      const result = await resolver.updateUserAvatar(mockId, mockFile);
+      expect(result).toEqual(`${mockAppUrl}/${mockedUuid}_test.jpg`);
+    });
+  });
+
+  describe('tasks', () => {
+    it('should return user tasks', async () => {
+      const tasks: [GQLTask] = [
+        {
+          id: 1,
+          taskTitle: 'Task Title',
+          taskDescription: 'Task Description',
+        },
+      ];
+      const mockUser = {
+        id: 1,
+        fullname: 'testuser',
+        tasks: tasks,
+        email: 'testuser@example.com',
+        password: 'abcd1234',
+        createdAt: '',
+        updatedAt: '',
+      };
+
+      const result = await resolver.tasks(mockUser);
+      expect(result).toEqual(mockUser.tasks);
     });
   });
 });
