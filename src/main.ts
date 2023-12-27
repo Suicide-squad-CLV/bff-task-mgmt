@@ -14,6 +14,14 @@ async function bootstrap() {
   // for catching error
   // app.useGlobalFilters(new RpcExceptionFilter());
 
+  // fix: favicon not found when add CustomExceptionFilter
+  app.use((req, res, next) => {
+    if (req.originalUrl?.includes('favicon.ico')) {
+      return res.sendStatus(204);
+    }
+    next();
+  });
+
   app.enableCors({
     origin: configService.get<string>('APP_FRONTEND_URL'),
     credentials: true,

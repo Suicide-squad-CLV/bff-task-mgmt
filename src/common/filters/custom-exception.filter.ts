@@ -65,6 +65,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
   }
 
   private catchHttp(exception: HttpException) {
+    console.log('exception', exception);
     const _error = exception.getResponse();
 
     let _exception: HttpCustomException;

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { DirectiveLocation, GraphQLDirective, GraphQLError } from 'graphql';
+import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault,
@@ -15,6 +15,7 @@ import { AuthModule } from './module/auth/auth.module';
 import { CustomExceptionFilter } from './common/filters/custom-exception.filter';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { handleFormatError } from './common/utils/handleFormatError.graphql';
 
 @Module({
   imports: [
@@ -46,24 +47,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
             })
           : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
       ],
-      formatError: (error: any) => {
-        const originalError = error.extensions.originalError as GraphQLError;
-        if (!originalError) {
-          return {
-            message: error.message,
-            errors: error.extensions?.message,
-            statusCode: error.extensions?.statusCode,
-            error: error.extensions?.error,
-          };
-        }
-
-        return {
-          message: originalError.message,
-          errors: originalError.stack,
-          statusCode: error.extensions?.originalError?.statusCode,
-          error: error.extensions?.error,
-        };
-      },
+      formatError: (error: any) => handleFormatError(error),
     }),
     AuthModule,
     UserModule,
