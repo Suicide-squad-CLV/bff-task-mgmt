@@ -59,7 +59,6 @@ type Mutation {
   forgotPassword(emailInput: ForgotPasswordInput!): SuccessReponse
   login(loginInput: LoginInput!): LoginResponse!
   register(registerInput: RegisterInput!): RegisterResponse!
-  removeTask(id: Int!): Boolean!
   removeUser(id: String!): SuccessReponse
   updatePassword(passwordInput: UpdatePasswordInput!): SuccessReponse
   updateTask(id: Int!, updatedTaskData: UpdateTaskInput!): Int!

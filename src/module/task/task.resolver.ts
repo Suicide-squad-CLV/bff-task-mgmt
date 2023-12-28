@@ -66,11 +66,6 @@ export class TaskResolver {
     return taskId;
   }
 
-  @Mutation(() => Boolean)
-  async removeTask(@Args('id', { type: () => Int }) id: number) {
-    return this.taskService.remove(id);
-  }
-
   @ResolveField()
   async assignUser(@Parent() task: GQLTask): Promise<Assignee> {
     // const { assignUser } = task;

@@ -97,7 +97,6 @@ export class TaskService implements OnModuleInit {
   }
 
   async update(id: number, updatedTaskData: UpdateTaskInput): Promise<number> {
-    console.log({ ...updatedTaskData, taskId: id });
     return await lastValueFrom(
       this.taskgRPCService.updateTask({ ...updatedTaskData, taskId: id }).pipe(
         map((task: TaskId) => {
@@ -108,11 +107,5 @@ export class TaskService implements OnModuleInit {
         }),
       ),
     );
-  }
-
-  remove(id: number): Promise<GQLTask> {
-    // TODO: Implement Remove gRPC Service
-    console.log(id);
-    return null;
   }
 }
