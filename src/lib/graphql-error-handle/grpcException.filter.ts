@@ -8,7 +8,7 @@ import {
 import { RpcException } from '@nestjs/microservices';
 import { Metadata, status } from '@grpc/grpc-js';
 import { GraphQLError } from 'graphql';
-import { HTTP_CODE_FROM_GRPC } from 'src/lib/graphql-error-handle/errorStatus.mapper';
+import { HTTP_CODE_FROM_GRPC } from './errorStatus.mapper';
 
 interface CustomException<T> {
   code: status;
@@ -27,19 +27,19 @@ export class CustomExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(CustomExceptionFilter.name);
 
   catch(exception: any) {
-    // if (process.env.NODE_ENV !== 'production') {
-    this.logger.error(exception);
-    // }
+    if (process.env.NODE_ENV !== 'production') {
+      this.logger.error(exception);
+    }
 
     // if (host.getType<GqlContextType>() === 'graphql') {
     if (exception instanceof HttpException) {
-      return this.catchHttp(exception);
+      return this.catchHttpException(exception);
     }
 
-    return this.catchGraphql(exception);
+    return this.catchGraphqlException(exception);
   }
 
-  private catchGraphql(exception: any) {
+  private catchGraphqlException(exception: any) {
     if (!(exception instanceof RpcException)) {
       exception = new RpcException(exception);
     }
@@ -63,7 +63,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
     });
   }
 
-  private catchHttp(exception: HttpException) {
+  private catchHttpException(exception: HttpException) {
     console.log('exception', exception);
     const _error = exception.getResponse();
 
